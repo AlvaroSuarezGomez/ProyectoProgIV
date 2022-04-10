@@ -8,11 +8,17 @@
 int main(void){
     char opcion;
     char opcion2;
+    sqlite3 *db;
+
+    int result = conectarBase("AtletasC.sqbpro",db);
+
+	
     do{
         opcion = menuPrincipal();
         switch (opcion){
             case '1':
-                printf("Has dado 1\n");
+                espaciosEntreMenus();
+                result = ensenarAtletas(db);
                 break;
             case '2':
                 
@@ -44,9 +50,7 @@ int main(void){
                 }while (opcion2 != '5');        
                 break;
             case '3':
-                espaciosEntreMenus();
                 printf("Agur crack :)\n");
-                return 4;
                 break;
         }
         

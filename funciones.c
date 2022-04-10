@@ -10,7 +10,7 @@ void limpiarLineas(char *texto, int capacidadaxima)
 
 char menuPrincipal(){
     printf("Elija lo que quiere hacer: \n");
-    printf("    1-Seleccionar Atleta \n");
+    printf("    1-Ensenar Atletas \n");
     printf("    2-Ver ranking por paises\n"); 
     printf("    3-Salir\n");
     printf("Seleccione opcion: \n");

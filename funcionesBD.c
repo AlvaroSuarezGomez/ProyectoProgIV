@@ -2,14 +2,24 @@
 #include <stdio.h>
 #include <string.h>
 
+int conectarBase(char base[],sqlite3 *db){
+    int result = sqlite3_open(base, &db);
+	if (result != SQLITE_OK) {
+		printf("Error opening database\n");
+		return result;
+	}
+    printf("Base de datos conectada\n") ;
+}
+
+
 int ensenarAtletas(sqlite3 *db){
     sqlite3_stmt *stmt;
 
-	char sql[] = "select nombre, apellido,pais,fechaNacimiento from atleta";
+	char sql[] = "select nombre, apellido, pais, fechaNacimiento from atleta";
 
 	int result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) ;
 	if (result != SQLITE_OK) {
-		printf("Error preparing statement (SELECT)\n");
+		printf("Error al cargar los atletas\n");
 		printf("%s\n", sqlite3_errmsg(db));
 		return result;
 	}
