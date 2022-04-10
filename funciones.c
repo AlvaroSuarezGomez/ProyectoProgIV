@@ -11,9 +11,8 @@ void limpiarLineas(char *texto, int capacidadaxima)
 char menuPrincipal(){
     printf("Elija lo que quiere hacer: \n");
     printf("    1-Seleccionar Atleta \n");
-    printf("    2-Ver ranking por países\n");
-    printf("    3-Volver\n");
-    printf("    4-Salir\n");
+    printf("    2-Ver ranking por paises\n"); 
+    printf("    3-Salir\n");
     printf("Seleccione opcion: \n");
     fflush(stdout);
 	char linea[5];
@@ -28,6 +27,7 @@ char menuPaises(){
     printf("    2-Francia\n");
     printf("    3-Rusia\n");
     printf("    4-Italia\n");
+    printf("    5-Volver\n");
     printf("Seleccione pais\n");
     fflush(stdout);
 	char linea[5];
@@ -35,5 +35,12 @@ char menuPaises(){
 	limpiarLineas(linea, 5);
 	return *linea;
 }
+
+void espaciosEntreMenus(){
+    for (int i=0; i<101 ; i++){
+        printf("\n");
+    }
+}
+
 
 

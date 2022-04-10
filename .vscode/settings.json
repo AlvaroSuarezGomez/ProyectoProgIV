@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "sqlite3.h": "c",
+        "string.h": "c",
+        "funciones.h": "c",
+        "typeinfo": "c"
+    }
+}
