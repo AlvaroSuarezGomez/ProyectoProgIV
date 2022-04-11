@@ -4,7 +4,6 @@
 char menuPrincipal();
 char menuPaises();
 char mostrarMenu();
-void espaciosEntreMenus();
 void cargarDatosPostu();
 void monstrarLogo();
 

@@ -10,6 +10,10 @@ int main(void){
     char opcion2;
     sqlite3 *db;
 
+    monstrarLogo();
+    printf("Bienvenidos : ");
+    printf("\n");
+
     int result = sqlite3_open("Basededatos.sqlite", &db);
 	if (result != SQLITE_OK) {
 		printf("Error opening database\n");
