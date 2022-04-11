@@ -10,7 +10,11 @@ int main(void){
     char opcion2;
     sqlite3 *db;
 
-    int result = conectarBase("AtletasC.sqbpro",db);
+    int result = sqlite3_open("Basededatos.sqlite", &db);
+	if (result != SQLITE_OK) {
+		printf("Error opening database\n");
+		return result;
+	}
 
 	
     do{
@@ -56,5 +60,4 @@ int main(void){
         
     } while (opcion != '3');
     return 0;
-    
 }
