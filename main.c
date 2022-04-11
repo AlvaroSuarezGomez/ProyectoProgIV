@@ -21,13 +21,13 @@ int main(void){
         opcion = menuPrincipal();
         switch (opcion){
             case '1':
-                espaciosEntreMenus();
+                system("cls");
                 result = ensenarAtletas(db);
                 break;
             case '2':
                 
                 do{
-                    espaciosEntreMenus();
+                    system("cls");
                     opcion2 = menuPaises();
                     switch (opcion2)
                     {
@@ -48,12 +48,13 @@ int main(void){
                         break;
                     case'5':
                         printf("Has dado 5\n");
-                        espaciosEntreMenus();
+                        system("cls");
                         break;
                     }
                 }while (opcion2 != '5');        
                 break;
             case '3':
+                system("cls");
                 printf("Agur crack :)\n");
                 break;
         }
