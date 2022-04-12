@@ -1,12 +1,18 @@
 #ifndef _FUNCIONESBD_H_
 #define _FUNCIONESBD_H_
 #include "sqlite3.h"
+typedef struct 
+{
+    int codigo;
+    char pais[50];
 
+}Pais;
 typedef struct{
     char dni[9];
     char nombre[20];
     int telefono;
     char pais[20];
+    int cdPais;
 }Persona;
 
 typedef struct{
@@ -14,12 +20,7 @@ typedef struct{
     Persona* persona;
 }ListaPersona;
 
-typedef struct 
-{
-    int codigo;
-    char pais[100];
 
-}Pais;
 
 typedef struct 
 {
@@ -63,7 +64,7 @@ int cargarAtletas(sqlite3 *db, ListaPersona* lper);
 void imprimirAtletas(ListaPersona lper);
 void imprimirPais(ListaPais lpais);
 int cargarPaises(sqlite3 *db,ListaPais* lpais);
-
+int ainadirPersona(sqlite3 *db, Persona per);
 
 
 

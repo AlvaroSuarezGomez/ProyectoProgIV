@@ -25,7 +25,14 @@ char menuPrincipal(){
 
 char menuPersona(ListaPersona* lper, sqlite3 *db){
     
-    
+    char newstr[20];
+    char newnombre[20];
+    int newtelefono;
+    int newcdPais;
+    char newdni[9];
+    char newPais[20];
+    ListaPais paises;
+    cargarPaises(db, &paises);
 	int opcionint=0;
     while(opcionint != 3){
         
@@ -33,7 +40,7 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
         imprimirAtletas(*lper);
         printf("\nElija lo que quiere hacer: \n");
         printf("    1-Seleccionar Atleta \n");
-        printf("    2-Añadir Atleta \n");
+        printf("    2-Ainadir Atleta \n");
         printf("    3-Salir \n");
         fflush(stdout);
         char linea[3];
@@ -54,7 +61,9 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
             int opcionedicion;
             char nuevonombre[20];
             int telefono;
-            while(opcionedicion!=4){
+            int modificar;
+            while(opcionedicion!=5){
+                modificar = 0;
                 system("cls");
                 printf("Los datos del atleta seleccionado son:\n");
                 printf("    Nombre: %s\n", lper->persona[atletaint].nombre);
@@ -65,7 +74,8 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
                 printf("    1- Modificar Nombre\n");
                 printf("    2- Modificar Telefono\n");
                 printf("    3- Modificar Pais\n");
-                printf("    4- SALIR\n");
+                printf("    4- Eliminar este atleta");
+                printf("    5- SALIR\n");
                 printf("NOTA: No se puede modificar DNI si quiere cambiarlo elimine y añada al atleta de nuevo\n");
                 printf("Seleccione una opcion:");
                 fflush(stdout);
@@ -80,6 +90,7 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
                     fflush(stdout);
                     fgets(nuevonombre, 20, stdin);
                     strcpy(lper->persona[atletaint].nombre, nuevonombre);
+                    modificar = 1;
                     
                     break;
                 case 2:;
@@ -89,29 +100,113 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
                     fgets(nuevonombre, 8, stdin);
                     sscanf(nuevonombre, "%i", &telefono);
                     lper->persona[atletaint].telefono = telefono;
+                    modificar = 1;
                     break;
                 case 3:;
-                    ListaPais paises;
-                    cargarPaises(db, &paises);
+                    
                     imprimirPais(paises);
                     strcpy(nuevonombre,"");
                     printf("Nuevo Pais(Numero): ");
                     fflush(stdout);
                     fgets(nuevonombre, 20, stdin);
                     sscanf(nuevonombre, "%i", &telefono);
-                    strcpy(lper->persona[atletaint].pais, paises.paises[telefono-1].pais);
+                    for(int i = 0; i<paises.tamanyo;i++){
+                        if(paises.paises[i].codigo == telefono){
+                            strcpy(lper->persona[atletaint].pais, paises.paises[i].pais);
+                            lper->persona[atletaint].cdPais = telefono;
+                            modificar = 1;
+                        }
+                    }
+                    break;
+                case 4:;
+                    //deletePersona(db, lper->persona[atletaint].dni);
+                    
                     break;
                 default:
                     break;
                 }
+                if(modificar == 1){
+                    //deletePersona(db, lper->persona[atletaint].dni);
+                    //ainadirPersona(db, lper->persona[atletaint]);
+                }
 
 
             }
-            //Meter modificarendatabase(Persona per);
-
+            
 
             break;
-        case 3:;
+        case 2:;//Ainadir atleta
+            
+
+            strcpy(newnombre, "");
+            newtelefono = 0;
+            newcdPais = 0;
+            strcpy(newdni, "");
+            strcpy(newPais, "");
+
+            printf("Seleccione nuevo dni(8 numeros y una letra):");
+            fflush(stdout);
+            fgets(newdni, 9, stdin);
+
+            printf("Seleccione nuevo nombre:");
+            fflush(stdout);
+            fgets(newnombre, 20, stdin);
+
+            printf("Seleccione nuevo telefono: ");
+            fflush(stdout);
+            fgets(newstr, 8, stdin);
+            sscanf(newstr, "%i", &telefono);
+
+            char *p = malloc(sizeof(char)*20);
+            imprimirPais(paises);
+            printf("Nuevo Pais(Numero): ");
+            fflush(stdout);
+            fgets(p, 20, stdin);
+            sscanf(p, "%i", &newcdPais);
+            for(int i = 0; i<paises.tamanyo;i++){
+                if(paises.paises[i].codigo == newcdPais){      
+                    strcpy(newPais, paises.paises[i].pais);
+                    newcdPais = paises.paises[i].codigo;
+                }
+            }
+            printf("Entra\n");
+            
+
+            ListaPersona *newlista;
+            int numero = lper->numero;
+            newlista->numero = (lper->numero + 1);
+            printf("Entra1.5\n");
+            newlista->persona = malloc(sizeof(Persona)*newlista->numero);
+            printf("Entra2\n");
+            for(int i = 0; i < lper->numero; i++){
+                newlista->persona[i].cdPais = lper->persona[i].cdPais;
+                newlista->persona[i].telefono = lper->persona[i].telefono;
+                strcpy(newlista->persona[i].dni, lper->persona[i].dni);
+                strcpy(newlista->persona[i].nombre, lper->persona[i].nombre);
+                strcpy(newlista->persona[i].pais, lper->persona[i].pais);
+            }
+            printf("Entra3\n");
+            newlista->persona[newlista->numero-1].cdPais = newcdPais;
+            newlista->persona[newlista->numero-1].telefono = newtelefono;
+            strcpy(newlista->persona[newlista->numero-1].dni,newdni);
+            strcpy(newlista->persona[newlista->numero-1].nombre,newnombre);
+            strcpy(newlista->persona[newlista->numero-1].pais,newPais);
+            free(lper->persona);
+            printf("Entra4\n");
+            lper->numero=0;
+            free(lper);
+            lper->numero = newlista->numero;
+            for(int i = 0; i < lper->numero; i++){
+                lper->persona[i].cdPais = newlista->persona[i].cdPais;
+                lper->persona[i].telefono = newlista->persona[i].telefono;
+                strcpy(lper->persona[i].dni, newlista->persona[i].dni);
+                strcpy(lper->persona[i].nombre, newlista->persona[i].nombre);
+                strcpy(lper->persona[i].pais, newlista->persona[i].pais);
+            }
+            //AQUI HAY QUE AÑADIR LA ULTIMA PERSONA DE lper A LA BASE DE DATOS
+            //ainadirPersona(db, lper->persona[lper->numero-1]);
+            break;
+        case 3:;//SALIR
             break;
         default:
             printf("Caso no contemplado\n");
