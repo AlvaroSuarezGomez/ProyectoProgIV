@@ -14,9 +14,26 @@ typedef struct{
     Persona* persona;
 }ListaPersona;
 
+typedef struct 
+{
+    int codigo;
+    char pais[100];
+
+}Pais;
+
+typedef struct 
+{
+    Pais* paises;
+    int tamanyo;
+
+}ListaPais;
+
+
+
 int conectarBase(char base[],sqlite3* db);
 int ensenarAtletas(sqlite3 *db, ListaPersona* lper);
 int ensenarPais(sqlite3 *db,char paisSeleccionado);
+int ensenarPaisesEnLaBD(sqlite3 *db,Pais* paises,int* tamanyo);
 
 
 

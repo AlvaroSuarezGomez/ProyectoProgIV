@@ -17,7 +17,6 @@ int conectarBase(char base[],sqlite3 *db){
 
 int ensenarAtletas(sqlite3 *db, ListaPersona* lper){
     sqlite3_stmt *stmt;
-	printf("Comienza\n");
 	char numeroFilas[] = "select count(*) from persona;";
 	int result = sqlite3_prepare_v2(db, numeroFilas, -1, &stmt, NULL);
 	if (result != SQLITE_OK) {
@@ -26,23 +25,19 @@ int ensenarAtletas(sqlite3 *db, ListaPersona* lper){
 		return result;
 	}
 	int nfilas;
-	printf("Primera Parte\n");
 	
 	do {
 		result = sqlite3_step(stmt);
 		if (result == SQLITE_ROW) {
 			nfilas = sqlite3_column_int(stmt, 0);
-			printf("socorro\n");
 		}
 	} while (result == SQLITE_ROW);
 	result = sqlite3_finalize(stmt);
-	printf("Esperanza\n");
 	if (result != SQLITE_OK) {
 		printf("Error finalizing statement (SELECT)\n");
 		printf("%s\n", sqlite3_errmsg(db));
 		return result;
 	}
-	printf("FE %i\n", nfilas);
 	lper->numero = nfilas;
 	printf("Numero de filas calculado\n");
 
@@ -152,3 +147,69 @@ int ensenarPais(sqlite3 *db,char paisSelecionado){
 	return SQLITE_OK;
 }
 
+int ensenarPaisesEnLaBD(sqlite3 *db,Pais* paises,int* tamanyo){
+    sqlite3_stmt *stmt;
+	char numeroFilas[] = "select count(*) from pais ;";
+	int result = sqlite3_prepare_v2(db, numeroFilas, -1, &stmt, NULL);
+	if (result != SQLITE_OK) {
+		printf("Error al cargar los atletas\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
+	}
+	int nfilas;
+	
+	do {
+		result = sqlite3_step(stmt) ;
+		if (result == SQLITE_ROW) {
+			nfilas = sqlite3_column_int(stmt, 0);
+		}
+	} while (result == SQLITE_ROW);
+	result = sqlite3_finalize(stmt);
+	if (result != SQLITE_OK) {
+		printf("Error finalizing statement (SELECT)\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
+	}
+
+
+	char sql[] = "select Cd_Pais, Nombre_Pais from pais;";
+
+	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+	if (result != SQLITE_OK) {
+		printf("Error al cargar los atletas\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
+	}
+
+	tamanyo = (int) nfilas;
+	paises = (Pais*) malloc(sizeof(Pais)*nfilas);
+
+	printf("\n");
+	printf("\n");
+	int i = 0;
+
+	int codigo;
+	char nPais[100];
+	printf("Estos son los datos (Filas: %i):\n", nfilas);
+	do {
+		result = sqlite3_step(stmt);
+		if (result == SQLITE_ROW) {
+			codigo = sqlite3_column_int(stmt, 0);
+			strcpy(nPais, (char *) sqlite3_column_text(stmt, 1));
+			//paises[i].codigo = codigo;
+			//strcpy(paises[i].pais, nPais);
+            printf("Codigo: %i Nombre Pais: %s\t \n", codigo, nPais);
+			i++;
+		}
+
+	} while (result == SQLITE_ROW);
+	printf("\n");
+	printf("\n");
+	result = sqlite3_finalize(stmt);
+	if (result != SQLITE_OK) {
+		printf("Error finalizing statement (SELECT)\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
+	}
+	return SQLITE_OK;
+}

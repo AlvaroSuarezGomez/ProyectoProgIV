@@ -32,9 +32,18 @@ int main(void){
                 free(lperp);
                 lperp = NULL;
                 break;
-            case '2':
+            case '2': ;
+
+            system("cls");
+                    Pais* paises;
+                    int tamanyo;
+                    tamanyo = 0;
+                    int* tp = &tamanyo;
+                    
+                    result = ensenarPaisesEnLaBD(db,paises,tp);
+                   
                 
-                do{
+                /*do{
                     system("cls");
                     opcion2 = menuPaises();
                     switch (opcion2)
@@ -59,7 +68,7 @@ int main(void){
                         system("cls");
                         break;
                     }
-                }while (opcion2 != '5');        
+                }while (opcion2 != '5');        */
                 break;
             case '3':
                 system("cls");
