@@ -99,7 +99,7 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
                     fflush(stdout);
                     fgets(nuevonombre, 20, stdin);
                     sscanf(nuevonombre, "%i", &telefono);
-                    strcpy(lper->persona[atletaint].pais, paises.paises[telefono].pais);
+                    strcpy(lper->persona[atletaint].pais, paises.paises[telefono-1].pais);
                     break;
                 default:
                     break;
