@@ -25,12 +25,13 @@ int main(void){
         opcion = menuPrincipal();
         switch (opcion){
             case '1':;
-                //system("cls");
+                system("cls");
                 ListaPersona lper;
                 ListaPersona* lperp = &lper;
                 result = cargarAtletas(db, lperp); 
                 printf("AaA");
-                imprimirAtletas(lper);
+                
+                menuPersona(lperp, db);
                 free(lperp);
                 lperp = NULL;
                 break;

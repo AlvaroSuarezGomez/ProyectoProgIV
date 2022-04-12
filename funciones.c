@@ -1,4 +1,5 @@
 #include "funciones.h"
+#include "funcionesBD.h"
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
@@ -19,25 +20,108 @@ char menuPrincipal(){
     fflush(stdout);
 	char linea[5];
 	fgets(linea, 3, stdin);
-	limpiarLineas(linea, 3);
 	return *linea;
 }
 
-char menuPaises(){
-    printf("Listado de paises: \n");
-    printf("    1-Espania\n");
-    printf("    2-Francia\n");
-    printf("    3-Rusia\n");
-    printf("    4-Italia\n");
-    printf("    5-Volver\n");
-    printf("Seleccione pais\n");
-    fflush(stdout);
-	char linea[5];
-	fgets(linea, 5, stdin);
-	limpiarLineas(linea, 5);
-	return *linea;
-}
+char menuPersona(ListaPersona* lper, sqlite3 *db){
+    
+    
+	int opcionint=0;
+    while(opcionint != 3){
+        
+        system("cls");
+        imprimirAtletas(*lper);
+        printf("\nElija lo que quiere hacer: \n");
+        printf("    1-Seleccionar Atleta \n");
+        printf("    2-Añadir Atleta \n");
+        printf("    3-Salir \n");
+        fflush(stdout);
+        char linea[3];
+	    fgets(linea, 3, stdin);
+        sscanf(linea, "%i", &opcionint);
+        printf("la linea seleccionada es: %i\n", opcionint);
+        switch (opcionint)
+        {
+        case 1:;
+            int atletaint;
+            printf("Seleccione el Atleta: ");
+            fflush(stdout);
+            fgets(linea, 3, stdin);
+            sscanf(linea, "%i", &atletaint);
+            atletaint--;
 
+
+            int opcionedicion;
+            char nuevonombre[20];
+            int telefono;
+            while(opcionedicion!=4){
+                system("cls");
+                printf("Los datos del atleta seleccionado son:\n");
+                printf("    Nombre: %s\n", lper->persona[atletaint].nombre);
+                printf("    DNI: %s\n", lper->persona[atletaint].dni);
+                printf("    Telefono: %i\n", lper->persona[atletaint].telefono);
+                printf("    Pais: %s\n\n", lper->persona[atletaint].pais);
+                printf("Elija lo que quiere hacer:\n");
+                printf("    1- Modificar Nombre\n");
+                printf("    2- Modificar Telefono\n");
+                printf("    3- Modificar Pais\n");
+                printf("    4- SALIR\n");
+                printf("NOTA: No se puede modificar DNI si quiere cambiarlo elimine y añada al atleta de nuevo\n");
+                printf("Seleccione una opcion:");
+                fflush(stdout);
+                fgets(linea, 3, stdin);
+                sscanf(linea, "%i", &opcionedicion);
+                printf("la opcion seleccionada es: %i\n",opcionedicion);
+                switch (opcionedicion)
+                {
+                case 1:;
+                    strcpy(nuevonombre,"");
+                    printf("Nuevo nombre: ");
+                    fflush(stdout);
+                    fgets(nuevonombre, 20, stdin);
+                    strcpy(lper->persona[atletaint].nombre, nuevonombre);
+                    
+                    break;
+                case 2:;
+                    strcpy(nuevonombre,"");
+                    printf("Nuevo telefono: ");
+                    fflush(stdout);
+                    fgets(nuevonombre, 8, stdin);
+                    sscanf(nuevonombre, "%i", &telefono);
+                    lper->persona[atletaint].telefono = telefono;
+                    break;
+                case 3:;
+                    ListaPais paises;
+                    cargarPaises(db, &paises);
+                    imprimirPais(paises);
+                    strcpy(nuevonombre,"");
+                    printf("Nuevo Pais(Numero): ");
+                    fflush(stdout);
+                    fgets(nuevonombre, 20, stdin);
+                    sscanf(nuevonombre, "%i", &telefono);
+                    strcpy(lper->persona[atletaint].pais, paises.paises[telefono].pais);
+                    break;
+                default:
+                    break;
+                }
+
+
+            }
+            //Meter modificarendatabase(Persona per);
+
+
+            break;
+        case 3:;
+            break;
+        default:
+            printf("Caso no contemplado\n");
+            break;
+        }
+
+        
+        
+    }
+}
 void cargarDatosPostu(){
     printf("Cargando \n");
     int porcentaje = 0;
