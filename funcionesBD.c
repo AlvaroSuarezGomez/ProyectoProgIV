@@ -1,6 +1,7 @@
 #include "funcionesBD.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 
 int conectarBase(char base[],sqlite3 *db){
@@ -14,8 +15,9 @@ int conectarBase(char base[],sqlite3 *db){
 }
 
 
-int ensenarAtletas(sqlite3 *db){
+int ensenarAtletas(sqlite3 *db, ListaPersona* lper){
     sqlite3_stmt *stmt;
+	printf("Comienza\n");
 	char numeroFilas[] = "select count(*) from persona;";
 	int result = sqlite3_prepare_v2(db, numeroFilas, -1, &stmt, NULL);
 	if (result != SQLITE_OK) {
@@ -24,23 +26,28 @@ int ensenarAtletas(sqlite3 *db){
 		return result;
 	}
 	int nfilas;
+	printf("Primera Parte\n");
 	
 	do {
-		result = sqlite3_step(stmt) ;
+		result = sqlite3_step(stmt);
 		if (result == SQLITE_ROW) {
 			nfilas = sqlite3_column_int(stmt, 0);
+			printf("socorro\n");
 		}
 	} while (result == SQLITE_ROW);
 	result = sqlite3_finalize(stmt);
+	printf("Esperanza\n");
 	if (result != SQLITE_OK) {
 		printf("Error finalizing statement (SELECT)\n");
 		printf("%s\n", sqlite3_errmsg(db));
 		return result;
 	}
+	printf("FE %i\n", nfilas);
+	lper->numero = nfilas;
+	printf("Numero de filas calculado\n");
 
-
-	char sql[] = "select A.DNI, A.Nombre, B.Nombre_Pais from persona A, pais B where A.Cd_Pais = B.Cd_Pais;";
-
+	char sql[] = "select A.DNI, A.Nombre, A.Telefono, B.Nombre_Pais from persona A, pais B where A.Cd_Pais = B.Cd_Pais;";
+	printf("%s", sql);
 	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (result != SQLITE_OK) {
 		printf("Error al cargar los atletas\n");
@@ -49,21 +56,32 @@ int ensenarAtletas(sqlite3 *db){
 	}
 	char dni[9];
 	char nombre[100];
+	int telefono;
 	char nombrePais[100];
 	
 
 	printf("\n");
 	printf("\n");
 	printf("Estos son los datos (Filas: %i):\n", nfilas);
-	do {
-		result = sqlite3_step(stmt) ;
-		if (result == SQLITE_ROW) {
+	int i = 0;
+	lper->persona = malloc(sizeof(Persona)*nfilas);
+	result = sqlite3_step(stmt) ;
+	while (result == SQLITE_ROW) {
+		
 			strcpy(nombre, (char *) sqlite3_column_text(stmt, 1));
 			strcpy(dni, (char *) sqlite3_column_text(stmt, 0));
-			strcpy(nombrePais, (char *) sqlite3_column_text(stmt, 2));
-            printf("DNI: %s Nombre: %s\t Pais: %s\n", dni, nombre, nombrePais);
-		}
-	} while (result == SQLITE_ROW);
+			nfilas = sqlite3_column_int(stmt, 2);
+			strcpy(nombrePais, (char *) sqlite3_column_text(stmt, 3));
+            
+			strcpy(lper->persona[i].dni, dni);
+			strcpy(lper->persona[i].nombre, nombre);
+			strcpy(lper->persona[i].pais, nombrePais);
+			printf("%i- Nombre: %s   Pais: %s\n", i+1, lper->persona[i].nombre, lper->persona[i].pais);
+			i++;
+			if (result < nfilas) {
+			result = sqlite3_step(stmt) ;
+			}
+	}
 	printf("\n");
 	printf("\n");
 	result = sqlite3_finalize(stmt);
@@ -72,7 +90,12 @@ int ensenarAtletas(sqlite3 *db){
 		printf("%s\n", sqlite3_errmsg(db));
 		return result;
 	}
+
+	//Apartir de aqui menu de persona probablemente valga la pena sacarlo a otra funcion
+	
 	return SQLITE_OK;
+
+
 }
 
 
@@ -128,3 +151,4 @@ int ensenarPais(sqlite3 *db,char paisSelecionado){
 
 	return SQLITE_OK;
 }
+
