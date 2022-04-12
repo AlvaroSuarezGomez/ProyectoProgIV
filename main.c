@@ -28,47 +28,15 @@ int main(void){
                 system("cls");
                 ListaPersona lper;
                 ListaPersona* lperp = &lper;
-                result = ensenarAtletas(db, lperp); 
+                result = cargarAtletas(db, lperp); 
                 free(lperp);
                 lperp = NULL;
                 break;
-            case '2': ;
-
-            system("cls");
-                    Pais* paises;
-                    int tamanyo;
-                    tamanyo = 0;
-                    int* tp = &tamanyo;
-                    
-                    result = ensenarPaisesEnLaBD(db,paises,tp);
-                   
-                
-                /*do{
+            case '2': 
                     system("cls");
-                    opcion2 = menuPaises();
-                    switch (opcion2)
-                    {
-                    case '1':
-                        printf("Has dado 1\n");
-                        break;
-                    
-                    case '2':
-                        printf("Has dado 2\n");
-                        break;
-
-                    case '3':
-                        printf("Has dado 3\n");
-                        break;
-
-                    case'4':
-                        printf("Has dado 4\n");
-                        break;
-                    case'5':
-                        printf("Has dado 5\n");
-                        system("cls");
-                        break;
-                    }
-                }while (opcion2 != '5');        */
+                    ListaPais paises;
+                    ListaPais* paisesp = &paises;
+                    result = cargarPaisesEnLaBD(db,paisesp);
                 break;
             case '3':
                 system("cls");

@@ -15,7 +15,7 @@ int conectarBase(char base[],sqlite3 *db){
 }
 
 
-int ensenarAtletas(sqlite3 *db, ListaPersona* lper){
+int cargarAtletas(sqlite3 *db, ListaPersona* lper){
     sqlite3_stmt *stmt;
 	char numeroFilas[] = "select count(*) from persona;";
 	int result = sqlite3_prepare_v2(db, numeroFilas, -1, &stmt, NULL);
@@ -42,7 +42,6 @@ int ensenarAtletas(sqlite3 *db, ListaPersona* lper){
 	printf("Numero de filas calculado\n");
 
 	char sql[] = "select A.DNI, A.Nombre, A.Telefono, B.Nombre_Pais from persona A, pais B where A.Cd_Pais = B.Cd_Pais;";
-	printf("%s", sql);
 	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (result != SQLITE_OK) {
 		printf("Error al cargar los atletas\n");
@@ -57,7 +56,6 @@ int ensenarAtletas(sqlite3 *db, ListaPersona* lper){
 
 	printf("\n");
 	printf("\n");
-	printf("Estos son los datos (Filas: %i):\n", nfilas);
 	int i = 0;
 	lper->persona = malloc(sizeof(Persona)*nfilas);
 	result = sqlite3_step(stmt) ;
@@ -71,7 +69,6 @@ int ensenarAtletas(sqlite3 *db, ListaPersona* lper){
 			strcpy(lper->persona[i].dni, dni);
 			strcpy(lper->persona[i].nombre, nombre);
 			strcpy(lper->persona[i].pais, nombrePais);
-			printf("%i- Nombre: %s   Pais: %s\n", i+1, lper->persona[i].nombre, lper->persona[i].pais);
 			i++;
 			if (result < nfilas) {
 			result = sqlite3_step(stmt) ;
@@ -147,7 +144,7 @@ int ensenarPais(sqlite3 *db,char paisSelecionado){
 	return SQLITE_OK;
 }
 
-int ensenarPaisesEnLaBD(sqlite3 *db,Pais* paises,int* tamanyo){
+int ensenarPaisesEnLaBD(sqlite3 *db,ListaPais* lpais){
     sqlite3_stmt *stmt;
 	char numeroFilas[] = "select count(*) from pais ;";
 	int result = sqlite3_prepare_v2(db, numeroFilas, -1, &stmt, NULL);
@@ -181,8 +178,8 @@ int ensenarPaisesEnLaBD(sqlite3 *db,Pais* paises,int* tamanyo){
 		return result;
 	}
 
-	tamanyo = (int) nfilas;
-	paises = (Pais*) malloc(sizeof(Pais)*nfilas);
+	lpais->tamanyo = (int) nfilas;
+	lpais->paises = (Pais*) malloc(sizeof(Pais)*nfilas);
 
 	printf("\n");
 	printf("\n");
