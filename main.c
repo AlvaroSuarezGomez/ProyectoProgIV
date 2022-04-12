@@ -26,7 +26,11 @@ int main(void){
         switch (opcion){
             case '1':
                 system("cls");
-                result = ensenarAtletas(db);
+                ListaPersona lper;
+                ListaPersona* lperp = &lper;
+                result = ensenarAtletas(db, lperp); 
+                free(lperp);
+                lperp = NULL;
                 break;
             case '2':
                 
