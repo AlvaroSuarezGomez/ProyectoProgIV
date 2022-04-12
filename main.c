@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "funcionesBD.h"
-
+//gcc main.c funciones.c funcionesBD.c sqlite3.c -o aaa.exe
 int main(void){
     char opcion;
     char opcion2;
