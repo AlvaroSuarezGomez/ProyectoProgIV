@@ -32,10 +32,9 @@ typedef struct
 
 int conectarBase(char base[],sqlite3* db);
 int cargarAtletas(sqlite3 *db, ListaPersona* lper);
-int cargarPais(sqlite3 *db,char paisSeleccionado);
 void imprimirAtletas(ListaPersona lper);
 void imprimirPais(ListaPais lpais);
-int ensenarPaisesEnLaBD(sqlite3 *db,ListaPais* lpais);
+int cargarPaises(sqlite3 *db,ListaPais* lpais);
 
 
 

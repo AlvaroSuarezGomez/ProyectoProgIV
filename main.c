@@ -24,19 +24,22 @@ int main(void){
     do{
         opcion = menuPrincipal();
         switch (opcion){
-            case '1':
-                system("cls");
+            case '1':;
+                //system("cls");
                 ListaPersona lper;
                 ListaPersona* lperp = &lper;
                 result = cargarAtletas(db, lperp); 
+                printf("AaA");
+                imprimirAtletas(lper);
                 free(lperp);
                 lperp = NULL;
                 break;
-            case '2': 
+            case '2': ;
                     system("cls");
                     ListaPais paises;
                     ListaPais* paisesp = &paises;
-                    result = cargarPaisesEnLaBD(db,paisesp);
+                    result = cargarPaises(db, paisesp);
+                    imprimirPais(paises);
                 break;
             case '3':
                 system("cls");
