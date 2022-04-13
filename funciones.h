@@ -1,6 +1,7 @@
 #ifndef _FUNCIONES_H_
 #define _FUNCIONES_H_
 #include "funcionesBD.h"
+
 char menuPrincipal();
 char menuPaises();
 char mostrarMenu();

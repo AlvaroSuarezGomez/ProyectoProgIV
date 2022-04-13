@@ -8,7 +8,7 @@ typedef struct
 
 }Pais;
 typedef struct{
-    char dni[9];
+    char dni[10];
     char nombre[20];
     int telefono;
     char pais[20];
@@ -65,7 +65,7 @@ void imprimirAtletas(ListaPersona lper);
 void imprimirPais(ListaPais lpais);
 int cargarPaises(sqlite3 *db,ListaPais* lpais);
 int ainadirPersona(sqlite3 *db, Persona per);
-
-
+deletePersona(db, lper->persona[atleaint].dni);
+ 
 
 #endif  /* _FUNCIONESBD_H_ */

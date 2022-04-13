@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "sqlite3.h"
 
 
 int conectarBase(char base[],sqlite3 *db){
@@ -166,25 +167,22 @@ void imprimirPais(ListaPais lpais){
 	}
 }
 int ainadirPersona(sqlite3 *db, Persona per){
-	/*
+	
 	sqlite3_stmt *stmt;
-	char sql[250] = "insert into persona persona (DNI,Nombre,Telefono,Cd_pais) values (";
-	strcat(sql,per.dni);
-	strcat(sql,", ");
-	strcat(sql,per.nombre);
-	strcat(sql,", ");
-	strcat(sql,per.telefono);
-	strcat(sql,", ");
-	strcat(sql,STRING(per.cdPais));
-	strcat(sql,");");
-	printf("%s",sql);
+	char sql[250] = "insert into persona (DNI,Nombre,Telefono,Cd_Pais) values (?,?,?,?);";
+	
 	int result;
 	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (result != SQLITE_OK) {
-		printf("Error al cargar los atletas\n");
+		printf("Error al introducir atleta\n");
 		printf("%s\n", sqlite3_errmsg(db));
 		return result;
 	}
+	sqlite3_bind_text(stmt, 1, per.dni,strlen(per.dni),SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 2, per.nombre, strlen(per.nombre), SQLITE_STATIC);
+	sqlite3_bind_int(stmt, 3, per.telefono);
+	sqlite3_bind_int(stmt, 4, per.cdPais);
+
 	result = sqlite3_step(stmt);
 	if (result != SQLITE_DONE) {
 		printf("Error deleting data\n");
@@ -198,5 +196,50 @@ int ainadirPersona(sqlite3 *db, Persona per){
 		return result;
 	}
 	return SQLITE_OK;
-	*/
+	
+}
+
+deletePersona(db, lper->persona[atletaint].dni){
+	sqlite3_stmt *stmt;
+	char sql[250] = "delete from persona where ;";
+	
+	int result;
+	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+	if (result != SQLITE_OK) {
+		printf("Error al introducir atleta\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
+	}
+	sqlite3_bind_text(stmt, 1, per.dni,strlen(per.dni),SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 2, per.nombre, strlen(per.nombre), SQLITE_STATIC);
+	sqlite3_bind_int(stmt, 3, per.telefono);
+	sqlite3_bind_int(stmt, 4, per.cdPais);
+
+	result = sqlite3_step(stmt);
+	if (result != SQLITE_DONE) {
+		printf("Error deleting data\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
+	}
+	result = sqlite3_finalize(stmt);
+	if (result != SQLITE_OK) {
+		printf("Error finalizing statement (SELECT)\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
+	}
+	return SQLITE_OK;
+}
+
+int main(void){
+	sqlite3 *db;
+	Persona p;
+	ListaPersona lista;
+	p.cdPais = 2;
+	strcpy(p.dni,"4324321L");
+	strcpy(p.nombre,"Lander");
+	p.telefono = 4312;
+	int result = sqlite3_open("Basededatos.sqlite", &db);
+	result = ainadirPersona(db,p);
+	result = cargarAtletas(db,&lista);
+	imprimirAtletas(lista);
 }

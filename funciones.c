@@ -204,7 +204,7 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
                 strcpy(lper->persona[i].pais, newlista->persona[i].pais);
             }
             //AQUI HAY QUE AÑADIR LA ULTIMA PERSONA DE lper A LA BASE DE DATOS
-            //ainadirPersona(db, lper->persona[lper->numero-1]);
+            ainadirPersona(db, lper->persona[lper->numero-1]);
             break;
         case 3:;//SALIR
             break;
@@ -212,9 +212,6 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
             printf("Caso no contemplado\n");
             break;
         }
-
-        
-        
     }
 }
 void cargarDatosPostu(){
