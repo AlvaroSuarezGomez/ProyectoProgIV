@@ -23,6 +23,16 @@ char menuPrincipal(){
 	return *linea;
 }
 
+char menuAdmin(){
+    printf("Es usted Admistrador o Usuario?\n");
+    printf("   1-Administrador\n");
+    printf("   2-Usuario\n");
+    fflush(stdout);
+	char linea[3];
+	fgets(linea, 3, stdin);
+	return *linea;
+}
+
 char menuPersona(ListaPersona* lper, sqlite3 *db){
     
     char newstr[20];
@@ -46,7 +56,7 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
         char linea[3];
 	    fgets(linea, 3, stdin);
         sscanf(linea, "%i", &opcionint);
-        printf("la linea seleccionada es: %i\n", opcionint);
+        printf("la opcion seleccionada es: %i\n", opcionint);
         switch (opcionint)
         {
         case 1:;
@@ -146,7 +156,7 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
 
             printf("Seleccione nuevo dni(8 numeros y una letra):");
             fflush(stdout);
-            fgets(newdni, 9, stdin);
+            fgets(newdni, 10, stdin);
 
             printf("Seleccione nuevo nombre:");
             fflush(stdout);
@@ -169,42 +179,14 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
                     newcdPais = paises.paises[i].codigo;
                 }
             }
-            printf("Entra\n");
-            
+            printf("Se ha introducido correctamente\n");
 
-            ListaPersona *newlista;
-            int numero = lper->numero;
-            newlista->numero = (lper->numero + 1);
-            printf("Entra1.5\n");
-            newlista->persona = malloc(sizeof(Persona)*newlista->numero);
-            printf("Entra2\n");
-            for(int i = 0; i < lper->numero; i++){
-                newlista->persona[i].cdPais = lper->persona[i].cdPais;
-                newlista->persona[i].telefono = lper->persona[i].telefono;
-                strcpy(newlista->persona[i].dni, lper->persona[i].dni);
-                strcpy(newlista->persona[i].nombre, lper->persona[i].nombre);
-                strcpy(newlista->persona[i].pais, lper->persona[i].pais);
-            }
-            printf("Entra3\n");
-            newlista->persona[newlista->numero-1].cdPais = newcdPais;
-            newlista->persona[newlista->numero-1].telefono = newtelefono;
-            strcpy(newlista->persona[newlista->numero-1].dni,newdni);
-            strcpy(newlista->persona[newlista->numero-1].nombre,newnombre);
-            strcpy(newlista->persona[newlista->numero-1].pais,newPais);
-            free(lper->persona);
-            printf("Entra4\n");
-            lper->numero=0;
-            free(lper);
-            lper->numero = newlista->numero;
-            for(int i = 0; i < lper->numero; i++){
-                lper->persona[i].cdPais = newlista->persona[i].cdPais;
-                lper->persona[i].telefono = newlista->persona[i].telefono;
-                strcpy(lper->persona[i].dni, newlista->persona[i].dni);
-                strcpy(lper->persona[i].nombre, newlista->persona[i].nombre);
-                strcpy(lper->persona[i].pais, newlista->persona[i].pais);
-            }
-            //AQUI HAY QUE AÑADIR LA ULTIMA PERSONA DE lper A LA BASE DE DATOS
-            ainadirPersona(db, lper->persona[lper->numero-1]);
+            Persona personaNUeva;
+            strcpy(personaNUeva.dni,newnombre);
+            strcpy(personaNUeva.nombre,newnombre);
+            personaNUeva.telefono = newtelefono;
+            personaNUeva.cdPais = newcdPais;
+            ainadirPersona(db,personaNUeva);
             break;
         case 3:;//SALIR
             break;
