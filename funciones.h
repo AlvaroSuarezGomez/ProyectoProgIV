@@ -2,6 +2,7 @@
 #define _FUNCIONES_H_
 #include "funcionesBD.h"
 
+char menuAdmin();
 char menuPrincipal();
 char menuPaises();
 char mostrarMenu();

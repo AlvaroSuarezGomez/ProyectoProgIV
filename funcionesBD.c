@@ -199,22 +199,9 @@ int ainadirPersona(sqlite3 *db, Persona per){
 	
 }
 
-deletePersona(db, lper->persona[atletaint].dni){
+/*int deletePersona(sqlite3* db, Persona per){ Todavia no incluido
 	sqlite3_stmt *stmt;
 	char sql[250] = "delete from persona where ;";
-	
-	int result;
-	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (result != SQLITE_OK) {
-		printf("Error al introducir atleta\n");
-		printf("%s\n", sqlite3_errmsg(db));
-		return result;
-	}
-	sqlite3_bind_text(stmt, 1, per.dni,strlen(per.dni),SQLITE_STATIC);
-	sqlite3_bind_text(stmt, 2, per.nombre, strlen(per.nombre), SQLITE_STATIC);
-	sqlite3_bind_int(stmt, 3, per.telefono);
-	sqlite3_bind_int(stmt, 4, per.cdPais);
-
 	result = sqlite3_step(stmt);
 	if (result != SQLITE_DONE) {
 		printf("Error deleting data\n");
@@ -228,9 +215,10 @@ deletePersona(db, lper->persona[atletaint].dni){
 		return result;
 	}
 	return SQLITE_OK;
-}
+}*/
 
-int main(void){
+/*
+int main(void){ Pruebas
 	sqlite3 *db;
 	Persona p;
 	ListaPersona lista;
@@ -242,4 +230,4 @@ int main(void){
 	result = ainadirPersona(db,p);
 	result = cargarAtletas(db,&lista);
 	imprimirAtletas(lista);
-}
+}*/
