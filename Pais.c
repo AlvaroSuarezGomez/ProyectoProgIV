@@ -1,4 +1,7 @@
 #include "pais.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 int cargarPaises(sqlite3 *db,ListaPais* lpais){
     sqlite3_stmt *stmt;

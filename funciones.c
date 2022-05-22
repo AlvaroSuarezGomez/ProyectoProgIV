@@ -129,7 +129,7 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
                     }
                     break;
                 case 4:;
-                    //deletePersona(db, lper->persona[atletaint].dni);
+                    //deletePersona(db, lper->persona[atletaint]);
                     
                     break;
                 default:

@@ -1,3 +1,7 @@
+#include "sqlite3.h"
+#ifndef _PAIS_H_
+#define _PAIS_H_
+
 typedef struct 
 {
     int codigo;
@@ -12,3 +16,5 @@ typedef struct
 }ListaPais;
 int cargarPaises(sqlite3 *db,ListaPais* lpais);
 void imprimirPais(ListaPais lpais);
+
+#endif

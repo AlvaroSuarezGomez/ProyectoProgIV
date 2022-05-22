@@ -4,6 +4,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include "funcionesBD.h"
+#include "pais.h"
+#include "persona.h"
 #include <conio.h>
 #define CONTRASENA "admin"
 #define BORRAR 8
