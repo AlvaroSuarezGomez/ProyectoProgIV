@@ -1,5 +1,6 @@
 #ifndef _FUNCIONESBD_H_
 #define _FUNCIONESBD_H_
+#include "pais.h"
 #include "sqlite3.h"
 typedef struct 
 {
