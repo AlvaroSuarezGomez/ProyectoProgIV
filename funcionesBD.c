@@ -15,6 +15,8 @@ int conectarBase(char base[],sqlite3 *db){
 	return result;
 }
 
+
+
 /*
 int main(void){ Pruebas
 	sqlite3 *db;

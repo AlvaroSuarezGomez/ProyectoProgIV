@@ -1,4 +1,7 @@
 #include "sqlite3.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #ifndef _PERSONA_H_
 #define _PERSONA_H_
 
