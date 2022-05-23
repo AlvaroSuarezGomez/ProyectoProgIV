@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "pais.h"
 #ifndef _PERSONA_H_
 #define _PERSONA_H_
 

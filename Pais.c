@@ -1,3 +1,4 @@
+#include "persona.h"
 #include "pais.h"
 #include <stdio.h>
 #include <string.h>

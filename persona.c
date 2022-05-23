@@ -1,4 +1,5 @@
 #include "persona.h"
+#include "pais.h"
 #include "sqlite3.h"
 #include <stdio.h>
 #include <string.h>
@@ -73,7 +74,6 @@ int cargarAtletas(sqlite3 *db, ListaPersona* lper){
 	}
 
 	//Apartir de aqui menu de persona probablemente valga la pena sacarlo a otra funcion
-	printf("llega");
 	return SQLITE_OK;
 
 

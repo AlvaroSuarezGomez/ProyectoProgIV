@@ -1,5 +1,7 @@
 #include "funciones.h"
 #include "funcionesBD.h"
+#include "pais.h"
+#include "persona.h"
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
