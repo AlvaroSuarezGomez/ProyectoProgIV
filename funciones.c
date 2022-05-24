@@ -92,6 +92,7 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
                 fgets(linea, 3, stdin);
                 sscanf(linea, "%i", &opcionedicion);
                 printf("la opcion seleccionada es: %i\n",opcionedicion);
+
                 switch (opcionedicion)
                 {
                 case 1:;
@@ -129,9 +130,10 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
                     }
                     break;
                 case 4:;
-                    //deletePersona(db, lper->persona[atletaint].dni);
+                    deletePersona(db, lper->persona[atletaint]);
                     
                     break;
+
                 default:
                     break;
                 }
@@ -187,6 +189,7 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
             personaNUeva.telefono = newtelefono;
             personaNUeva.cdPais = newcdPais;
             ainadirPersona(db,personaNUeva);
+            cargarAtletas(db, lper);
             break;
         case 3:;//SALIR
             break;

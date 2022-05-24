@@ -66,6 +66,5 @@ void imprimirPais(ListaPais lpais);
 int cargarPaises(sqlite3 *db,ListaPais* lpais);
 int ainadirPersona(sqlite3 *db, Persona per);
 int deletePersona(sqlite3* db, Persona per);
- 
 
 #endif  /* _FUNCIONESBD_H_ */
