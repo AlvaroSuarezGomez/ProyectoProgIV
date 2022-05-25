@@ -5,17 +5,23 @@
 #include <string.h>
 #include <stdlib.h>
 
-int cargarAtletas(sqlite3 *db, ListaPersona* lper){
+int cargarAtletas(sqlite3 *db, ListaPersona* lper, FILE* ficherolog){
+	ficherolog = fopen("logger.txt", "a");
+    fprintf(ficherolog, "COMIENZO FUNCION CARGAR ATLETAS______________\n");
+    fclose(ficherolog);
     sqlite3_stmt *stmt;
 	char numeroFilas[] = "select count(*) from persona;";
 	
 	int result = sqlite3_prepare_v2(db, numeroFilas, -1, &stmt, NULL);
 	if (result != SQLITE_OK) {
-		printf("Error al cargar los atletas\n");
-		printf("%s\n", sqlite3_errmsg(db));
+		ficherolog = fopen("logger.txt", "a");
+        fprintf(ficherolog, "Error cargando Atletas 1\n");
+		fprintf(ficherolog,"%s\n", sqlite3_errmsg(db));
+        fclose(ficherolog);
 		return result;
 	}
 	int nfilas;
+
 
 	do {
 		result = sqlite3_step(stmt);
@@ -25,17 +31,24 @@ int cargarAtletas(sqlite3 *db, ListaPersona* lper){
 	} while (result == SQLITE_ROW);
 	result = sqlite3_finalize(stmt);
 	if (result != SQLITE_OK) {
-		printf("Error finalizing statement (SELECT)\n");
-		printf("%s\n", sqlite3_errmsg(db));
+		ficherolog = fopen("logger.txt", "a");
+        fprintf(ficherolog, "Error finalizing statement (SELECT) 1\n");
+		fprintf(ficherolog,"%s\n", sqlite3_errmsg(db));
+        fclose(ficherolog);
 		return result;
 	}
 	lper->numero = nfilas;
+	ficherolog = fopen("logger.txt", "a");
+    fprintf(ficherolog, "El numero de filas que se meten es %i", nfilas);
+    fclose(ficherolog);
 
 	char sql[] = "select A.DNI, A.Nombre, A.Telefono, B.Nombre_Pais, B.Cd_Pais from persona A, pais B where A.Cd_Pais = B.Cd_Pais;";
 	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (result != SQLITE_OK) {
-		printf("Error al cargar los atletas\n");
-		printf("%s\n", sqlite3_errmsg(db));
+		ficherolog = fopen("logger.txt", "a");
+        fprintf(ficherolog, "Error cargando Atletas 2\n");
+		fprintf(ficherolog,"%s\n", sqlite3_errmsg(db));
+        fclose(ficherolog);
 		return result;
 	}
 	
@@ -47,7 +60,9 @@ int cargarAtletas(sqlite3 *db, ListaPersona* lper){
 	int i = 0;
 	lper->persona = malloc(sizeof(Persona)*nfilas);
 	result = sqlite3_step(stmt) ;
-
+	ficherolog = fopen("logger.txt", "a");
+    fprintf(ficherolog, "Comienza a pasarlo a listas\n");
+    fclose(ficherolog);
 	while (result == SQLITE_ROW) {
 			strcpy(dni, (char *) sqlite3_column_text(stmt, 0));
 			strcpy(nombre, (char *) sqlite3_column_text(stmt, 1));
@@ -60,23 +75,35 @@ int cargarAtletas(sqlite3 *db, ListaPersona* lper){
 			strcpy(lper->persona[i].pais, nombrePais);
 			lper->persona[i].telefono = telefono;
 			lper->persona[i].cdPais = cdPais;
+			ficherolog = fopen("logger.txt", "a");
+    		fprintf(ficherolog, "Metido: DNI: %s, NOMBRE: %s PAIS: %s, Telefono: %i", dni, nombre, nombrePais, telefono);
+    		fclose(ficherolog);
 			i++;
 			if (result < nfilas) {
 			result = sqlite3_step(stmt) ;
 			}
+			ficherolog = fopen("logger.txt", "a");
+    		fprintf(ficherolog, "   result = %i || i = %i\n", result, i);
+    		fclose(ficherolog);
+
 	}
+	ficherolog = fopen("logger.txt", "a");
+    fprintf(ficherolog, "Termina de pasarlo a listas\n");
+    fclose(ficherolog);
 	//SE ROMPE AQUÍ
 	result = sqlite3_finalize(stmt);
 	if (result != SQLITE_OK) {
-		printf("Error finalizing statement (SELECT)\n");
-		printf("%s\n", sqlite3_errmsg(db));
+		ficherolog = fopen("logger.txt", "a");
+        fprintf(ficherolog, "Error finalizing statement (SELECT) 2\n");
+		fprintf(ficherolog,"%s\n", sqlite3_errmsg(db));
+        fclose(ficherolog);
 		return result;
 	}
-
+	ficherolog = fopen("logger.txt", "a");
+    fprintf(ficherolog, "FIN DE LA FUNCION_______________________________\n");
+    fclose(ficherolog);
 	//Apartir de aqui menu de persona probablemente valga la pena sacarlo a otra funcion
 	return SQLITE_OK;
-
-
 }
 
 

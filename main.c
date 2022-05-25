@@ -12,6 +12,13 @@
 #define ENTER 13
 //gcc main.c funciones.c funcionesBD.c sqlite3.c -o aaa.exe
 int main(void){
+    FILE* ficherolog;
+    ficherolog = fopen("logger.txt", "w");
+    fprintf(ficherolog, "Empezamos\n");
+    fclose(ficherolog);
+    ficherolog = fopen("logger.txt", "a");
+    fprintf(ficherolog, "Comienzo de Programa:\n\n");
+    fclose(ficherolog);
     char opcion;
     char opcionIntro;
     int fallo = 0;
@@ -19,19 +26,26 @@ int main(void){
     int maxFallo = 5;
     char contrasena[21];
     char encriptar;
-   // int opcionIntro;
+    // int opcionIntro;
+    
     sqlite3 *db;
-   
-
-    monstrarLogo();
-    printf("Bienvenido/a");
-    printf("\n");
-
     int result = sqlite3_open("Basededatos.sqlite", &db);
 	if (result != SQLITE_OK) {
 		printf("Error opening database\n");
 		return result;
 	}
+    ficherolog = fopen("logger.txt", "a");
+    fprintf(ficherolog, "Base de datos abierta\n");
+    fclose(ficherolog);
+    
+    monstrarLogo();
+    printf("Bienvenido/a");
+    printf("\n");
+
+    ficherolog = fopen("logger.txt", "a");
+    fprintf(ficherolog, "Logo mostrado\n");
+    fclose(ficherolog);
+
     
     
     /*while(opcionIntro!=1 && opcionIntro!=2){  Opcion posible??
@@ -42,6 +56,9 @@ int main(void){
 
 
         opcionIntro = menuAdmin();
+        ficherolog = fopen("logger.txt", "a");
+        fprintf(ficherolog, "Se ha seleccionado la opcion %c(1- Admin 2- Usuario)\n", opcionIntro);
+        fclose(ficherolog);
         switch (opcionIntro)
         {
             case '1':;
@@ -71,7 +88,7 @@ int main(void){
                         system("cls");
                         ListaPersona lper;
                         ListaPersona* lperp = &lper;
-                        result = cargarAtletas(db, lperp); 
+                        result = cargarAtletas(db, lperp, ficherolog); 
                          
                         menuPersona(lperp, db);
                         free(lperp);
@@ -93,12 +110,21 @@ int main(void){
                 system("cls");
                 do{
                     opcion = menuPrincipal();
+                    ficherolog = fopen("logger.txt", "a");
+                    fprintf(ficherolog, "Menu principal mostrado y selecciona opcion %c\n", opcion);
+                    fclose(ficherolog);
                     switch (opcion){
                         case '1':;
                             system("cls");
+                            ficherolog = fopen("logger.txt", "a");
+                            fprintf(ficherolog, "Comenzando carga de atletas...\n");
+                            fclose(ficherolog); 
                             ListaPersona lper;
                             ListaPersona* lperp = &lper;
-                            result = cargarAtletas(db, lperp); 
+                            result = cargarAtletas(db, lperp, ficherolog);
+                            ficherolog = fopen("logger.txt", "a");
+                            fprintf(ficherolog, "Atletas cargados\n");
+                            fclose(ficherolog); 
                             imprimirAtletas(lper);
                         
                             free(lperp);
