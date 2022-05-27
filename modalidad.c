@@ -1,14 +1,12 @@
-#include "pais.h"
-#include "atleta.h"
-#include "lugar.h"
+#include "modalidad.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include "sqlite3.h"
 
-int cargarPaises(sqlite3 *db,ListaPais* lpais){
+int cargarModalidades(sqlite3 *db, ListaModalidades* lmod){
     sqlite3_stmt *stmt;
-	char numeroFilas[] = "select count(*) from pais ;";
+	char numeroFilas[] = "select count(*) from modalidad ;";
 	int result = sqlite3_prepare_v2(db, numeroFilas, -1, &stmt, NULL);
 	if (result != SQLITE_OK) {
 		printf("Error al cargar los atletas\n");
@@ -31,7 +29,7 @@ int cargarPaises(sqlite3 *db,ListaPais* lpais){
 	}
 
 
-	char sql[] = "select Cd_Pais, Nombre_Pais from pais;";
+	char sql[] = "select CD_MODALIDAD, DESC_MODALIDAD, NOM_MODALIDAD from modalidad;";
 
 	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (result != SQLITE_OK) {
@@ -40,15 +38,16 @@ int cargarPaises(sqlite3 *db,ListaPais* lpais){
 		return result;
 	}
 
-	lpais->tamanyo = (int) nfilas;
-	lpais->paises = (Pais*) malloc(sizeof(Pais)*nfilas);
+	lmod->tamanyo = (int) nfilas;
+	lmod->modalidades = malloc(sizeof(Modalidad)*nfilas);
 
 	int i = 0;
 	result = sqlite3_step(stmt);
 	do {
 		if (result == SQLITE_ROW) {
-			lpais->paises[i].codigo = sqlite3_column_int(stmt, 0);
-			strcpy(lpais->paises[i].pais, (char *) sqlite3_column_text(stmt, 1));
+			lmod->modalidades[i].cd_mod = sqlite3_column_int(stmt, 0);
+			strcpy(lmod->modalidades[i].descripcion, (char *) sqlite3_column_text(stmt, 1));
+			strcpy(lmod->modalidades[i].nom_modalidad, (char *) sqlite3_column_text(stmt, 2));
 			i++;
 			result = sqlite3_step(stmt);
 		}
@@ -63,11 +62,11 @@ int cargarPaises(sqlite3 *db,ListaPais* lpais){
 	return SQLITE_OK;
 }
 
-int ainadirPais(sqlite3 *db, Pais pais){
+int ainadirModalidad(sqlite3 *db, Modalidad modalidad){
 	
 	sqlite3_stmt *stmt;
 
-	char sql[250] = "insert into pais (Cd_Pais,Nombre_Pais) values (?, ?)";
+	char sql[250] = "insert into modalidad (CD_MODALIDAD,DESC_MODALIDAD,NOM_MODALIDAD) values (?, ?, ?)";
 	
 	int result;
 	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
@@ -76,8 +75,9 @@ int ainadirPais(sqlite3 *db, Pais pais){
 		printf("%s\n", sqlite3_errmsg(db));
 		return result;
 	}
-	sqlite3_bind_int(stmt, 1, pais.codigo);
-	sqlite3_bind_text(stmt, 2, pais.pais, strlen(pais.pais), SQLITE_STATIC);
+	sqlite3_bind_int(stmt, 1, modalidad.cd_mod);
+	sqlite3_bind_text(stmt, 2, modalidad.descripcion, strlen(modalidad.descripcion), SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 3, modalidad.nom_modalidad, strlen(modalidad.nom_modalidad), SQLITE_STATIC);
 
 	result = sqlite3_step(stmt);
 	if (result != SQLITE_DONE) {
@@ -95,11 +95,11 @@ int ainadirPais(sqlite3 *db, Pais pais){
 	
 }
 
-int deletePais(sqlite3 *db, Pais pais){
+int deleteModalidad(sqlite3 *db, Modalidad modalidad){
 	
 	sqlite3_stmt *stmt;
 
-	char sql[250] = "delete from pais where Cd_Pais = ?";
+	char sql[250] = "delete from modalidad where CD_MODALIDAD = ?";
 	
 	int result;
 	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
@@ -108,25 +108,64 @@ int deletePais(sqlite3 *db, Pais pais){
 		printf("%s\n", sqlite3_errmsg(db));
 		return result;
 	}
+	sqlite3_bind_int(stmt, 1, modalidad.cd_mod);
 
-	ListaPersona lper;
-	ListaLugar llugar;
-	cargarAtletas(db, &lper);
-	cargarLugares(db, &llugar);
-	for (int i = 0; i < lper.numero; i++) {
-		if (pais.codigo == lper.persona[i].cdPais) {
-			deletePersona(db, lper.persona[i]);
-		}
+	result = sqlite3_step(stmt);
+	if (result != SQLITE_DONE) {
+		printf("Error deleting data\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
 	}
-	for (int i = 0; i < llugar.tamanyo; i++) {
-		if (pais.codigo == llugar.lugar[i].Cd_Pais) {
-			deleteLugar(db, llugar.lugar[i]);
-		}
+	result = sqlite3_finalize(stmt);
+	if (result != SQLITE_OK) {
+		printf("Error finalizing statement (SELECT)\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
 	}
-	free(lper.persona);
-	free(llugar.lugar);
 
-	sqlite3_bind_int(stmt, 1, pais.codigo);
+	char sql2[250] = "delete from compite where CD_MODALIDAD = ?";
+	
+	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+	if (result != SQLITE_OK) {
+		printf("Error al introducir atleta\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
+	}
+	sqlite3_bind_int(stmt, 1, modalidad.cd_mod);
+
+	result = sqlite3_step(stmt);
+	if (result != SQLITE_DONE) {
+		printf("Error deleting data\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
+	}
+	result = sqlite3_finalize(stmt);
+	if (result != SQLITE_OK) {
+		printf("Error finalizing statement (SELECT)\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
+	}
+
+	return SQLITE_OK;
+	
+}
+
+int actualizarModalidad(sqlite3 *db, Modalidad modalidad){
+	
+	sqlite3_stmt *stmt;
+
+	char sql[250] = "update modalidad set DESC_MODALIDAD = ?, NOM_MODALIDAD = ? where CD_MODALIDAD = ?";
+	
+	int result;
+	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+	if (result != SQLITE_OK) {
+		printf("Error al introducir atleta\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
+	}
+	sqlite3_bind_text(stmt, 1, modalidad.descripcion, strlen(modalidad.descripcion), SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 1, modalidad.nom_modalidad, strlen(modalidad.nom_modalidad), SQLITE_STATIC);
+	sqlite3_bind_int(stmt, 2, modalidad.cd_mod);
 
 	result = sqlite3_step(stmt);
 	if (result != SQLITE_DONE) {
@@ -144,40 +183,8 @@ int deletePais(sqlite3 *db, Pais pais){
 	
 }
 
-int actualizarPais(sqlite3 *db, Pais pais){
-	
-	sqlite3_stmt *stmt;
-
-	char sql[250] = "update pais set Nombre_Pais = ? where Cd_Pais = ?";
-	
-	int result;
-	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-	if (result != SQLITE_OK) {
-		printf("Error al introducir atleta\n");
-		printf("%s\n", sqlite3_errmsg(db));
-		return result;
-	}
-	sqlite3_bind_text(stmt, 1, pais.pais, strlen(pais.pais), SQLITE_STATIC);
-	sqlite3_bind_int(stmt, 2, pais.codigo);
-
-	result = sqlite3_step(stmt);
-	if (result != SQLITE_DONE) {
-		printf("Error deleting data\n");
-		printf("%s\n", sqlite3_errmsg(db));
-		return result;
-	}
-	result = sqlite3_finalize(stmt);
-	if (result != SQLITE_OK) {
-		printf("Error finalizing statement (SELECT)\n");
-		printf("%s\n", sqlite3_errmsg(db));
-		return result;
-	}
-	return SQLITE_OK;
-	
-}
-
-void imprimirPais(ListaPais lpais){
-	for(int i = 0; i<lpais.tamanyo;i++){
-		printf("%i- Codigo: %i    Pais: %s\n", i+1, lpais.paises[i].codigo, lpais.paises[i].pais);
+void imprimirModalidades(ListaModalidades lmod){
+	for(int i = 0; i<lmod.tamanyo;i++){
+		printf("%i- Codigo: %i    Nombre: %s    Descripcion: %s\n", i+1, lmod.modalidades[i].cd_mod, lmod.modalidades[i].nom_modalidad, lmod.modalidades[i].descripcion);
 	}
 }

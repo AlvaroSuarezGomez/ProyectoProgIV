@@ -5,8 +5,9 @@
 #include <stdlib.h>
 #include "funcionesBD.h"
 #include "pais.h"
-#include "persona.h"
 #include <conio.h>
+#include "atleta.h"
+#include "pais.h"
 #define CONTRASENA "admin"
 #define BORRAR 8
 #define ENTER 13
@@ -32,7 +33,7 @@ int main(void){
 		printf("Error opening database\n");
 		return result;
 	}
-    
+    crearTablas(db);
     
     /*while(opcionIntro!=1 && opcionIntro!=2){  Opcion posible??
         printf("Es usted Admistrador o Usuario?\n");
@@ -56,6 +57,7 @@ int main(void){
                             contrasena[i] = '\0';
                             break;
                         }else if(encriptar==BORRAR){
+                            if (i == 0) continue;
                             i--;
                             printf("\b \b");
                         
@@ -70,12 +72,10 @@ int main(void){
                     if(strcmp(CONTRASENA,contrasena)==0){
                         system("cls");
                         ListaPersona lper;
-                        ListaPersona* lperp = &lper;
-                        result = cargarAtletas(db, lperp); 
+                        result = cargarAtletas(db, &lper); 
                          
-                        menuPersona(lperp, db);
-                        free(lperp);
-                        lperp = NULL;
+                        menuPrincipalAdmin(db);
+                        free(lper.persona);
                         acierto++;
                     }else{
                         printf("\n");
@@ -97,12 +97,10 @@ int main(void){
                         case '1':;
                             system("cls");
                             ListaPersona lper;
-                            ListaPersona* lperp = &lper;
-                            result = cargarAtletas(db, lperp); 
+                            result = cargarAtletas(db, &lper); 
                             imprimirAtletas(lper);
                         
-                            free(lperp);
-                            lperp = NULL;
+                            free(lper.persona);
                             break;
                         case '2': ;
                                 system("cls");
@@ -124,5 +122,6 @@ int main(void){
 
     //}
     
+    sqlite3_close(db);
     return 0;
 }

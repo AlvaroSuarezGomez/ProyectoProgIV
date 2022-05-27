@@ -1,10 +1,15 @@
 #include "funciones.h"
 #include "funcionesBD.h"
 #include "pais.h"
-#include "persona.h"
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
+#include "atleta.h"
+#include "pais.h"
+#include "competicion.h"
+#include "modalidad.h"
+#include "lugar.h"
+#include "ranking.h"
 // para linux usar #include <unistd.h>
 
 void limpiarLineas(char *texto, int capacidadaxima)
@@ -35,21 +40,64 @@ char menuAdmin(){
 	return *linea;
 }
 
-char menuPersona(ListaPersona* lper, sqlite3 *db){
-    
+void menuPrincipalAdmin(sqlite3* db) {
+
+    int opcionint=0;
+    while(opcionint != 5){
+        //system("cls");
+        printf("\nElija lo que quiere hacer: \n");
+        printf("    1-Gestionar atletas \n");
+        printf("    2-Gestionar paises \n");
+        printf("    3-Gestionar modalidades \n");
+        printf("    4-Gestionar lugares\n");
+        printf("    5-Gestionar competiciones\n");
+        printf("    6-Salir \n");
+        fflush(stdout);
+        char linea[3];
+	    fgets(linea, 3, stdin);
+        sscanf(linea, "%i", &opcionint);
+        printf("la opcion seleccionada es: %i\n", opcionint);
+        switch (opcionint)
+        {
+        case 1:;
+            menuPersona(db);
+            break;
+        case 2:
+            menuPais(db);
+            break;
+        case 3:
+            menuModalidades(db);
+        case 4:
+            menuLugares(db);
+            break;
+        case 5:
+            //MENUCOMPETICIONES
+            break;
+        case 6:;//SALIR
+            break;
+        default:
+            printf("Caso no contemplado\n");
+            break;
+        }
+    }
+
+}
+
+char menuPersona(sqlite3 *db){
+    ListaPais paises;
+    ListaPersona lper;
     char newstr[20];
     char newnombre[20];
     int newtelefono;
     int newcdPais;
-    char newdni[9];
+    char newdni[10];
     char newPais[20];
-    ListaPais paises;
-    cargarPaises(db, &paises);
 	int opcionint=0;
     while(opcionint != 3){
-        
-        system("cls");
-        imprimirAtletas(*lper);
+        cargarPaises(db, &paises);
+        cargarAtletas(db, &lper);
+        //system("cls");
+        imprimirAtletas(lper);
         printf("\nElija lo que quiere hacer: \n");
         printf("    1-Seleccionar Atleta \n");
         printf("    2-Ainadir Atleta \n");
@@ -70,18 +118,18 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
             atletaint--;
 
 
-            int opcionedicion;
+            int opcionedicion = 0;
             char nuevonombre[20];
             int telefono;
-            int modificar;
-            while(opcionedicion!=5){
+            int modificar = 0;
+            while(opcionedicion!=5 && opcionedicion!=4){
                 modificar = 0;
                 system("cls");
                 printf("Los datos del atleta seleccionado son:\n");
-                printf("    Nombre: %s\n", lper->persona[atletaint].nombre);
-                printf("    DNI: %s\n", lper->persona[atletaint].dni);
-                printf("    Telefono: %i\n", lper->persona[atletaint].telefono);
-                printf("    Pais: %s\n\n", lper->persona[atletaint].pais);
+                printf("    Nombre: %s\n", lper.persona[atletaint].nombre);
+                printf("    DNI: %s\n", lper.persona[atletaint].dni);
+                printf("    Telefono: %i\n", lper.persona[atletaint].telefono);
+                printf("    Pais: %s\n\n", lper.persona[atletaint].pais);
                 printf("Elija lo que quiere hacer:\n");
                 printf("    1- Modificar Nombre\n");
                 printf("    2- Modificar Telefono\n");
@@ -101,7 +149,9 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
                     printf("Nuevo nombre: ");
                     fflush(stdout);
                     fgets(nuevonombre, 20, stdin);
-                    strcpy(lper->persona[atletaint].nombre, nuevonombre);
+                    fflush(stdin);
+                    limpiarFinales(nuevonombre);
+                    strcpy(lper.persona[atletaint].nombre, nuevonombre);
                     modificar = 1;
                     
                     break;
@@ -110,8 +160,10 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
                     printf("Nuevo telefono: ");
                     fflush(stdout);
                     fgets(nuevonombre, 8, stdin);
-                    sscanf(nuevonombre, "%i", &telefono);
-                    lper->persona[atletaint].telefono = telefono;
+                    fflush(stdin);
+                    limpiarFinales(nuevonombre);
+                    telefono = atoi(nuevonombre);
+                    lper.persona[atletaint].telefono = telefono;
                     modificar = 1;
                     break;
                 case 3:;
@@ -121,25 +173,26 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
                     printf("Nuevo Pais(Numero): ");
                     fflush(stdout);
                     fgets(nuevonombre, 20, stdin);
-                    sscanf(nuevonombre, "%i", &telefono);
+                    fflush(stdin);
+                    limpiarFinales(nuevonombre);
+                    telefono = atoi(nuevonombre);
                     for(int i = 0; i<paises.tamanyo;i++){
                         if(paises.paises[i].codigo == telefono){
-                            strcpy(lper->persona[atletaint].pais, paises.paises[i].pais);
-                            lper->persona[atletaint].cdPais = telefono;
+                            strcpy(lper.persona[atletaint].pais, paises.paises[i].pais);
+                            lper.persona[atletaint].cdPais = telefono;
                             modificar = 1;
                         }
                     }
                     break;
                 case 4:;
-                    //deletePersona(db, lper->persona[atletaint]);
+                    deletePersona(db, lper.persona[atletaint]);
                     
                     break;
                 default:
                     break;
                 }
                 if(modificar == 1){
-                    //deletePersona(db, lper->persona[atletaint].dni);
-                    //ainadirPersona(db, lper->persona[atletaint]);
+                    actualizarPersona(db, lper.persona[atletaint]);
                 }
 
 
@@ -148,7 +201,7 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
 
             break;
         case 2:;//Ainadir atleta
-            
+            Persona personaNUeva;
 
             strcpy(newnombre, "");
             newtelefono = 0;
@@ -159,36 +212,46 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
             printf("Seleccione nuevo dni(8 numeros y una letra):");
             fflush(stdout);
             fgets(newdni, 10, stdin);
+            fflush(stdin);
+            limpiarFinales(newdni);
+            strcpy(personaNUeva.dni,newdni);
 
             printf("Seleccione nuevo nombre:");
             fflush(stdout);
             fgets(newnombre, 20, stdin);
+            fflush(stdin);
+            limpiarFinales(newnombre);
+            strcpy(personaNUeva.nombre,newnombre);
 
             printf("Seleccione nuevo telefono: ");
             fflush(stdout);
-            fgets(newstr, 8, stdin);
-            sscanf(newstr, "%i", &telefono);
+            fgets(newstr, 10, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            sscanf(newstr, "%i", &newtelefono);
 
             char *p = malloc(sizeof(char)*20);
             imprimirPais(paises);
             printf("Nuevo Pais(Numero): ");
             fflush(stdout);
             fgets(p, 20, stdin);
+            fflush(stdin);
             sscanf(p, "%i", &newcdPais);
-            for(int i = 0; i<paises.tamanyo;i++){
-                if(paises.paises[i].codigo == newcdPais){      
-                    strcpy(newPais, paises.paises[i].pais);
-                    newcdPais = paises.paises[i].codigo;
-                }
+            printf("%i\n", newcdPais);
+            newcdPais--;
+            if (newcdPais < 0 || newcdPais >= paises.tamanyo) {
+                printf("No has elegido un pais valido\n");
+                break;
             }
+
             printf("Se ha introducido correctamente\n");
 
-            Persona personaNUeva;
-            strcpy(personaNUeva.dni,newnombre);
-            strcpy(personaNUeva.nombre,newnombre);
+            
             personaNUeva.telefono = newtelefono;
-            personaNUeva.cdPais = newcdPais;
+            personaNUeva.cdPais = paises.paises[newcdPais].codigo;
             ainadirPersona(db,personaNUeva);
+            free(lper.persona);
+            cargarAtletas(db, &lper);
             break;
         case 3:;//SALIR
             break;
@@ -196,8 +259,405 @@ char menuPersona(ListaPersona* lper, sqlite3 *db){
             printf("Caso no contemplado\n");
             break;
         }
+        free(lper.persona);
+        free(paises.paises);
     }
 }
+
+char menuPais(sqlite3 *db){
+    ListaPais paises;
+    char newstr[50];
+	int opcionint=0;
+    while(opcionint != 3){
+        cargarPaises(db, &paises);
+        //system("cls");
+        imprimirPais(paises);
+        printf("\nElija lo que quiere hacer: \n");
+        printf("    1-Seleccionar Pais \n");
+        printf("    2-Ainadir Pais \n");
+        printf("    3-Salir \n");
+        fflush(stdout);
+        char linea[3];
+	    fgets(linea, 3, stdin);
+        sscanf(linea, "%i", &opcionint);
+        printf("la opcion seleccionada es: %i\n", opcionint);
+        switch (opcionint)
+        {
+        case 1:;
+            int paisint;
+            printf("Seleccione el Pais: ");
+            fflush(stdout);
+            fgets(linea, 3, stdin);
+            sscanf(linea, "%i", &paisint);
+            paisint--;
+
+
+            int opcionedicion = 0;
+            int modificar = 0;
+            while(opcionedicion!=3 && opcionedicion!=2){
+                modificar = 0;
+                system("cls");
+                printf("Los datos del pais seleccionado son:\n");
+                printf("    Codigo: %i\n", paises.paises[paisint].codigo);
+                printf("    Nombre: %s\n", paises.paises[paisint].pais);
+                printf("Elija lo que quiere hacer:\n");
+                printf("    1- Modificar Nombre\n");
+                printf("    2- Eliminar este pais");
+                printf("    3- SALIR\n");
+                printf("NOTA: No se puede modificar Codigo si quiere cambiarlo elimine y añada el pais de nuevo\n");
+                printf("Seleccione una opcion:");
+                fflush(stdout);
+                fgets(linea, 3, stdin);
+                sscanf(linea, "%i", &opcionedicion);
+                printf("la opcion seleccionada es: %i\n",opcionedicion);
+
+                switch (opcionedicion)
+                {
+                case 1:;
+                    strcpy(newstr,"");
+                    printf("Nuevo nombre: ");
+                    fflush(stdout);
+                    fgets(newstr, 20, stdin);
+                    fflush(stdin);
+                    limpiarFinales(newstr);
+                    strcpy(paises.paises[paisint].pais, newstr);
+                    modificar = 1;
+                    
+                    break;
+                case 2:;
+                    deletePais(db, paises.paises[paisint]);
+                    break;
+
+                default:
+                    break;
+                }
+                if(modificar == 0){
+                    actualizarPais(db, paises.paises[paisint]);
+                }
+
+
+            }
+            
+            break;
+        case 2:;//Ainadir atleta
+            Pais paisNuevo;
+
+            printf("Seleccione nuevo codigo(numeros): ");
+            fflush(stdout);
+            fgets(newstr, 10, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            sscanf(newstr, "%i", &paisNuevo.codigo);
+
+            printf("Seleccione nuevo nombre: ");
+            fflush(stdout);
+            fgets(newstr, 50, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            strcpy(paisNuevo.pais, newstr);
+
+            
+            ainadirPais(db, paisNuevo);
+            free(paises.paises);
+            cargarPaises(db, &paises);
+            break;
+        case 3:;//SALIR
+            break;
+        default:
+            printf("Caso no contemplado\n");
+            break;
+        }
+        free(paises.paises);
+    }
+}
+
+char menuModalidades(sqlite3 *db){
+    ListaModalidades lmod;
+    char newstr[200];
+	int opcionint=0;
+    while(opcionint != 3){
+        cargarModalidades(db, &lmod);
+        //system("cls");
+        imprimirModalidades(lmod);
+        printf("\nElija lo que quiere hacer: \n");
+        printf("    1-Seleccionar Modalidad \n");
+        printf("    2-Ainadir Modalidad \n");
+        printf("    3-Salir \n");
+        fflush(stdout);
+        char linea[3];
+	    fgets(linea, 3, stdin);
+        sscanf(linea, "%i", &opcionint);
+        printf("la opcion seleccionada es: %i\n", opcionint);
+        switch (opcionint)
+        {
+        case 1:;
+            int modalidadint;
+            printf("Seleccione la Modalidad: ");
+            fflush(stdout);
+            fgets(linea, 3, stdin);
+            sscanf(linea, "%i", &modalidadint);
+            modalidadint--;
+
+
+            int opcionedicion = 0;
+            int modificar = 0;
+            while(opcionedicion!=3 && opcionedicion!=4){
+                modificar = 0;
+                system("cls");
+                printf("Los datos de la modalidad seleccionado son:\n");
+                printf("    Codigo:      %i\n", lmod.modalidades[modalidadint].cd_mod);
+                printf("    Descripcion: %s\n", lmod.modalidades[modalidadint].descripcion);
+                printf("    Nombre:      %s\n", lmod.modalidades[modalidadint].nom_modalidad);
+                printf("Elija lo que quiere hacer:\n");
+                printf("    1- Modificar Descripcion\n");
+                printf("    2- Modificar Nombre\n");
+                printf("    3- Eliminar esta modalidad");
+                printf("    4- SALIR\n");
+                printf("NOTA: No se puede modificar Codigo si quiere cambiarlo elimine y añada la modalidad de nuevo\n");
+                printf("Seleccione una opcion:");
+                fflush(stdout);
+                fgets(linea, 3, stdin);
+                sscanf(linea, "%i", &opcionedicion);
+                printf("la opcion seleccionada es: %i\n",opcionedicion);
+
+                switch (opcionedicion)
+                {
+                case 1:;
+                    strcpy(newstr,"");
+                    printf("Nueva descripcion: ");
+                    fflush(stdout);
+                    fgets(newstr, 200, stdin);
+                    fflush(stdin);
+                    limpiarFinales(newstr);
+                    strcpy(lmod.modalidades[modalidadint].descripcion, newstr);
+                    modificar = 1;
+                    
+                    break;
+                case 2:;
+                    strcpy(newstr,"");
+                    printf("Nuevo nombre: ");
+                    fflush(stdout);
+                    fgets(newstr, 40, stdin);
+                    fflush(stdin);
+                    limpiarFinales(newstr);
+                    strcpy(lmod.modalidades[modalidadint].nom_modalidad, newstr);
+                    modificar = 1;
+                    
+                    break;
+                case 3:;
+                    deleteModalidad(db, lmod.modalidades[modalidadint]);
+                    break;
+
+                default:
+                    break;
+                }
+                if(modificar == 0){
+                    actualizarModalidad(db, lmod.modalidades[modalidadint]);
+                }
+
+
+            }
+            
+            break;
+        case 2:;//Ainadir atleta
+            Modalidad nuevaModalidad;
+
+            printf("Seleccione nuevo codigo(numeros): ");
+            fflush(stdout);
+            fgets(newstr, 10, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            sscanf(newstr, "%i", &nuevaModalidad.cd_mod);
+
+            printf("Seleccione nueva descripcion: ");
+            fflush(stdout);
+            fgets(newstr, 50, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            strcpy(nuevaModalidad.descripcion, newstr);
+
+            printf("Seleccione nuevo nombre: ");
+            fflush(stdout);
+            fgets(newstr, 50, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            strcpy(nuevaModalidad.nom_modalidad, newstr);
+
+            ainadirModalidad(db, nuevaModalidad);
+            free(lmod.modalidades);
+            cargarModalidades(db, &lmod);
+            break;
+        case 3:;//SALIR
+            break;
+        default:
+            printf("Caso no contemplado\n");
+            break;
+        }
+        free(lmod.modalidades);
+        cargarModalidades(db, &lmod);
+    }
+}
+
+char menuLugares(sqlite3 *db){
+    ListaPais paises;
+    ListaLugar lugares;
+    char newstr[50];
+    int newint;
+	int opcionint=0;
+    while(opcionint != 3){
+        cargarLugares(db, &lugares);
+        cargarPaises(db, &paises);
+        //system("cls");
+        imprimirLugares(lugares);
+        printf("\nElija lo que quiere hacer: \n");
+        printf("    1-Seleccionar Lugar \n");
+        printf("    2-Ainadir Lugar \n");
+        printf("    3-Salir \n");
+        fflush(stdout);
+        char linea[3];
+	    fgets(linea, 3, stdin);
+        sscanf(linea, "%i", &opcionint);
+        printf("la opcion seleccionada es: %i\n", opcionint);
+        switch (opcionint)
+        {
+        case 1:;
+            int lugarint;
+            printf("Seleccione el lugar: ");
+            fflush(stdout);
+            fgets(linea, 3, stdin);
+            sscanf(linea, "%i", &lugarint);
+            lugarint--;
+
+
+            int opcionedicion = 0;
+            int modificar = 0;
+            while(opcionedicion!=4 && opcionedicion!=5){
+                modificar = 0;
+                system("cls");
+                printf("Los datos del lugar seleccionado son:\n");
+                printf("    Codigo:    %i\n", lugares.lugar[lugarint].Cd_Lugar);
+                printf("    Nombre:    %s\n", lugares.lugar[lugarint].NOM_LUGAR);
+                printf("    Localidad: %s\n", lugares.lugar[lugarint].LOC_LUGAR);
+                printf("    Pais:      %s\n", lugares.lugar[lugarint].pais);
+                printf("Elija lo que quiere hacer:\n");
+                printf("    1- Modificar Nombre\n");
+                printf("    2- Modificar localidad\n");
+                printf("    3- Modificar pais\n");
+                printf("    4- Eliminar este lugar");
+                printf("    5- SALIR\n");
+                printf("NOTA: No se puede modificar Codigo si quiere cambiarlo elimine y añada el lugar de nuevo\n");
+                printf("Seleccione una opcion:");
+                fflush(stdout);
+                fgets(linea, 3, stdin);
+                sscanf(linea, "%i", &opcionedicion);
+                printf("la opcion seleccionada es: %i\n",opcionedicion);
+
+                switch (opcionedicion)
+                {
+                case 1:;
+                    strcpy(newstr,"");
+                    printf("Nuevo nombre: ");
+                    fflush(stdout);
+                    fgets(newstr, 50, stdin);
+                    fflush(stdin);
+                    limpiarFinales(newstr);
+                    strcpy(lugares.lugar[lugarint].NOM_LUGAR, newstr);
+                    modificar = 1;
+                    
+                    break;
+                case 2:;
+                    strcpy(newstr,"");
+                    printf("Nuevo localidad: ");
+                    fflush(stdout);
+                    fgets(newstr, 50, stdin);
+                    fflush(stdin);
+                    limpiarFinales(newstr);
+                    strcpy(lugares.lugar[lugarint].LOC_LUGAR, newstr);
+                    modificar = 1;
+                    
+                    break;
+                case 3:;
+                    imprimirPais(paises);
+                    strcpy(newstr,"");
+                    printf("Nuevo pais (numero): ");
+                    fflush(stdout);
+                    fgets(newstr, 10, stdin);
+                    fflush(stdin);
+                    limpiarFinales(newstr);
+                    sscanf(newstr, "%i", &newint);
+                    newint--;
+                    if (newint >= 0 && newint < paises.tamanyo) {
+                        modificar = 1;
+                        lugares.lugar[lugarint].Cd_Pais = paises.paises[newint].codigo;
+                    }
+                    break;
+                case 4:;
+                    deleteLugar(db, lugares.lugar[lugarint]);
+                    break;
+
+                default:
+                    break;
+                }
+                if(modificar == 0){
+                    actualizarLugar(db, lugares.lugar[lugarint]);
+                }
+
+
+            }
+            
+            break;
+        case 2:;//Ainadir atleta
+            Lugar lugarNuevo;
+
+            printf("Seleccione nuevo codigo(numeros): ");
+            fflush(stdout);
+            fgets(newstr, 10, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            sscanf(newstr, "%i", &lugarNuevo.Cd_Lugar);
+
+            printf("Seleccione nuevo nombre: ");
+            fflush(stdout);
+            fgets(newstr, 50, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            strcpy(lugarNuevo.NOM_LUGAR, newstr);
+
+            printf("Seleccione nuevo localidad: ");
+            fflush(stdout);
+            fgets(newstr, 50, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            strcpy(lugarNuevo.LOC_LUGAR, newstr);
+
+            imprimirPais(paises);
+            printf("Seleccione nuevo pais(numeros): ");
+            fflush(stdout);
+            fgets(newstr, 10, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            sscanf(newstr, "%i", &newint);
+            newint--;
+
+            if (newint < 0 || newint >= paises.tamanyo) {
+                printf("No has seleccionado un pais valido\n");
+                break;
+            }
+            lugarNuevo.Cd_Pais = paises.paises[newint].codigo;
+            
+            ainadirLugar(db, lugarNuevo);
+            break;
+        case 3:;//SALIR
+            break;
+        default:
+            printf("Caso no contemplado\n");
+            break;
+        }
+        free(lugares.lugar);
+        free(paises.paises);
+    }
+}
+
 void cargarDatosPostu(){
     printf("Cargando \n");
     int porcentaje = 0;
@@ -294,5 +754,6 @@ void monstrarLogo(){
     printf("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\n");
 }
 
-
-
+void limpiarFinales(char* str) {
+    while((str[strlen(str)-1]=='\n'||str[strlen(str)-1]=='\r')&&strlen(str)>0)str[strlen(str)-1]='\0';
+}

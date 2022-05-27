@@ -1,10 +1,6 @@
+#ifndef _ATLETA_H_
+#define _ATLETA_H_
 #include "sqlite3.h"
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include "pais.h"
-#ifndef _PERSONA_H_
-#define _PERSONA_H_
 
 typedef struct{
     char dni[10];
@@ -20,8 +16,9 @@ typedef struct{
 }ListaPersona;
 
 int cargarAtletas(sqlite3 *db, ListaPersona* lper);
-void imprimirAtletas(ListaPersona lper);
 int ainadirPersona(sqlite3 *db, Persona per);
-//int deletePersona(sqlite3* db, Persona per);
+int deletePersona(sqlite3* db, Persona per);
+int actualizarPersona(sqlite3* db, Persona per);
+void imprimirAtletas(ListaPersona lper);
 
 #endif

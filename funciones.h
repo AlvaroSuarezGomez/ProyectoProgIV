@@ -6,9 +6,14 @@ char menuAdmin();
 char menuPrincipal();
 char menuPaises();
 char mostrarMenu();
-char menuPersona(ListaPersona* lper, sqlite3 *db);
+void menuPrincipalAdmin(sqlite3* db);
+char menuPersona(sqlite3 *db);
+char menuPais(sqlite3 *db);
+char menuModalidades(sqlite3* db);
+char menuLugares(sqlite3* db);
 void cargarDatosPostu();
 void monstrarLogo();
+void limpiarFinales(char* str);
 
 
 #endif  /* _FUNCIONES_H_ */

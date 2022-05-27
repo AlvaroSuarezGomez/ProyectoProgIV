@@ -3,6 +3,10 @@
         "sqlite3.h": "c",
         "string.h": "c",
         "funciones.h": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "stdio.h": "c",
+        "*.rh": "c",
+        "funcionesbd.h": "c",
+        "pais.h": "c"
     }
 }
