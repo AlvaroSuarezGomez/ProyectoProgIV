@@ -5,22 +5,16 @@
 #include "sqlite3.h"
 
 
-int cargarAtletas(sqlite3 *db, ListaPersona* lper, FILE* ficherolog){
-	ficherolog = fopen("logger.txt", "a");
-    fprintf(ficherolog, "COMIENZO FUNCION CARGAR ATLETAS______________\n");
-    fclose(ficherolog);
+int cargarAtletas(sqlite3 *db, ListaPersona* lper){
     sqlite3_stmt *stmt;
 	char numeroFilas[] = "select count(*) from persona;";
 	int result = sqlite3_prepare_v2(db, numeroFilas, -1, &stmt, NULL);
 	if (result != SQLITE_OK) {
-		ficherolog = fopen("logger.txt", "a");
-        fprintf(ficherolog, "Error cargando Atletas 1\n");
-		fprintf(ficherolog,"%s\n", sqlite3_errmsg(db));
-        fclose(ficherolog);
+		printf("Error al cargar los atletas\n");
+		printf("%s\n", sqlite3_errmsg(db));
 		return result;
 	}
 	int nfilas;
-
 
 	do {
 		result = sqlite3_step(stmt);
@@ -30,20 +24,16 @@ int cargarAtletas(sqlite3 *db, ListaPersona* lper, FILE* ficherolog){
 	} while (result == SQLITE_ROW);
 	result = sqlite3_finalize(stmt);
 	if (result != SQLITE_OK) {
-		ficherolog = fopen("logger.txt", "a");
-        fprintf(ficherolog, "Error finalizing statement (SELECT) 1\n");
-		fprintf(ficherolog,"%s\n", sqlite3_errmsg(db));
-        fclose(ficherolog);
+		printf("Error finalizing statement (SELECT)\n");
+		printf("%s\n", sqlite3_errmsg(db));
 		return result;
 	}
 	lper->numero = nfilas;
 	char sql[] = "select A.DNI, A.Nombre, A.Telefono, B.Nombre_Pais, B.Cd_Pais from persona A, pais B where A.Cd_Pais = B.Cd_Pais;";
 	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (result != SQLITE_OK) {
-		ficherolog = fopen("logger.txt", "a");
-        fprintf(ficherolog, "Error cargando Atletas 2\n");
-		fprintf(ficherolog,"%s\n", sqlite3_errmsg(db));
-        fclose(ficherolog);
+		printf("Error al cargar los atletas\n");
+		printf("%s\n", sqlite3_errmsg(db));
 		return result;
 	}
 	
@@ -62,18 +52,16 @@ int cargarAtletas(sqlite3 *db, ListaPersona* lper, FILE* ficherolog){
 	}
 	result = sqlite3_finalize(stmt);
 	if (result != SQLITE_OK) {
-		ficherolog = fopen("logger.txt", "a");
-        fprintf(ficherolog, "Error finalizing statement (SELECT) 2\n");
-		fprintf(ficherolog,"%s\n", sqlite3_errmsg(db));
-        fclose(ficherolog);
+		printf("Error finalizing statement (SELECT)\n");
+		printf("%s\n", sqlite3_errmsg(db));
 		return result;
 	}
-	ficherolog = fopen("logger.txt", "a");
-    fprintf(ficherolog, "FIN DE LA FUNCION_______________________________\n");
-    fclose(ficherolog);
+
 	//Apartir de aqui menu de persona probablemente valga la pena sacarlo a otra funcion
 	
 	return SQLITE_OK;
+
+
 }
 
 int ainadirPersona(sqlite3 *db, Persona per){
