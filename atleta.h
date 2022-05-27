@@ -15,7 +15,7 @@ typedef struct{
     Persona* persona;
 }ListaPersona;
 
-int cargarAtletas(sqlite3 *db, ListaPersona* lper);
+int cargarAtletas(sqlite3 *db, ListaPersona* lper, FILE* ficherolog);
 int ainadirPersona(sqlite3 *db, Persona per);
 int deletePersona(sqlite3* db, Persona per);
 int actualizarPersona(sqlite3* db, Persona per);
