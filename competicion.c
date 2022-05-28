@@ -1,4 +1,5 @@
 #include "competicion.h"
+#include "pais.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -37,6 +38,75 @@ int cargarCompeticiones(sqlite3 *db,ListaCompeticion* lcomp){
 		printf("%s\n", sqlite3_errmsg(db));
 		return result;
 	}
+
+	lcomp->tamanyo = (int) nfilas;
+	lcomp->competicion = (Competicion*) malloc(sizeof(Competicion)*nfilas);
+
+	int i = 0;
+	result = sqlite3_step(stmt);
+	do {
+		if (result == SQLITE_ROW) {
+			lcomp->competicion[i].CdCompeticion = sqlite3_column_int(stmt, 0);
+			lcomp->competicion[i].CdLugar = sqlite3_column_int(stmt, 1);
+			strcpy(lcomp->competicion[i].lugar, sqlite3_column_text(stmt, 2));
+			strcpy(lcomp->competicion[i].organizador, sqlite3_column_text(stmt, 3));
+			strcpy(lcomp->competicion[i].nomCompeticion, sqlite3_column_text(stmt, 4));
+			lcomp->competicion[i].dia = sqlite3_column_int(stmt, 5);
+			lcomp->competicion[i].mes = sqlite3_column_int(stmt, 6);
+			lcomp->competicion[i].ano = sqlite3_column_int(stmt, 7);
+			i++;
+			result = sqlite3_step(stmt);
+		}
+
+	} while (result == SQLITE_ROW);
+	result = sqlite3_finalize(stmt);
+	if (result != SQLITE_OK) {
+		printf("Error finalizing statement (SELECT)\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
+	}
+	return SQLITE_OK;
+}
+
+int cargarCompeticionesPorPais(sqlite3 *db,ListaCompeticion* lcomp, int codigoPais){
+    sqlite3_stmt *stmt;
+	char numeroFilas[] = "select count(A.CD_COMPETICION) from competicion A, lugar B where A.CD_LUGAR = B.CD_LUGAR AND B.CD_PAIS = ? ;";
+	int result = sqlite3_prepare_v2(db, numeroFilas, -1, &stmt, NULL);
+	if (result != SQLITE_OK) {
+		printf("Error al cargar las competiciones\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
+	}
+
+	sqlite3_bind_int(stmt, 1, codigoPais);
+
+	int nfilas;
+	
+	do {
+		result = sqlite3_step(stmt) ;
+		if (result == SQLITE_ROW) {
+			nfilas = sqlite3_column_int(stmt, 0);
+		}
+	} while (result == SQLITE_ROW);
+	result = sqlite3_finalize(stmt);
+	if (result != SQLITE_OK) {
+		printf("Error finalizing statement (SELECT)\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
+	}
+
+
+	char sql[] = "select A.CD_COMPETICION, B.CD_LUGAR, B.NOM_LUGAR, A.ORGANIZADOR, A.NOM_COMPETICION, A.DIA, A.MES, A.ANO from competicion A, lugar B, pais C where A.CD_LUGAR = B.CD_LUGAR and B.CD_PAIS = C.CD_PAIS and C.CD_PAIS = ?;";
+
+
+	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+	if (result != SQLITE_OK) {
+		printf("Error al cargar las competiciones\n");
+		printf("%s\n", sqlite3_errmsg(db));
+		return result;
+	}
+
+	sqlite3_bind_int(stmt, 1, codigoPais);	
 
 	lcomp->tamanyo = (int) nfilas;
 	lcomp->competicion = (Competicion*) malloc(sizeof(Competicion)*nfilas);

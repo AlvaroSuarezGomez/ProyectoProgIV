@@ -43,7 +43,7 @@ char menuAdmin(){
 void menuPrincipalAdmin(sqlite3* db) {
 
     int opcionint=0;
-    while(opcionint != 6){
+    while(opcionint != 7){
         //system("cls");
         printf("\nElija lo que quiere hacer: \n");
         printf("    1-Gestionar atletas \n");
@@ -51,7 +51,8 @@ void menuPrincipalAdmin(sqlite3* db) {
         printf("    3-Gestionar modalidades \n");
         printf("    4-Gestionar lugares\n");
         printf("    5-Gestionar competiciones\n");
-        printf("    6-Salir \n");
+        printf("    6-Gestionar rankings\n");
+        printf("    7-Salir \n");
         fflush(stdout);
         char linea[3];
 	    fgets(linea, 3, stdin);
@@ -73,7 +74,10 @@ void menuPrincipalAdmin(sqlite3* db) {
         case 5:
             menuCompeticiones(db);
             break;
-        case 6:;//SALIR
+        case 6:
+            menuRanking(db);
+            break;
+        case 7:;//SALIR
             break;
         default:
             printf("Caso no contemplado\n");
@@ -854,6 +858,203 @@ char menuLugares(sqlite3 *db){
         }
         free(lugares.lugar);
         free(paises.paises);
+    }
+}
+
+char menuRanking(sqlite3* db) {
+    Ranking rank;
+    char newstr[200];
+    double lanzamiento;
+
+
+    int opcionint = 0;
+    while (opcionint != 3) {
+        //system("cls");
+        printf("\nElija lo que quiere hacer: \n");
+        printf("    1-Seleccionar Competidor en Ranking \n");
+        printf("    2-Ainadir Competidor en Ranking \n");
+        printf("    3-Salir \n");
+        fflush(stdout);
+        char linea[3];
+        fgets(linea, 3, stdin);
+        sscanf(linea, "%i", &opcionint);
+        printf("La opcion seleccionada es: %i\n", opcionint);
+
+        switch (opcionint)
+        {
+        case 1:;
+            ListaPais lPais;
+            cargarPaises(db, &lPais);
+            imprimirPais(lPais);
+            int paisInt;
+            printf("Seleccione el pais: ");
+            fflush(stdout);
+            fgets(linea, 3, stdin);
+            sscanf(linea, "%i", &paisInt);
+
+            ListaCompeticion lComp;
+            cargarCompeticionesPorPais(db, &lComp, paisInt);
+            imprimirCompeticiones(lComp);
+            int competicionInt;
+            printf("Seleccione la competicion: ");
+            fflush(stdout);
+            fgets(linea, 3, stdin);
+            sscanf(linea, "%i", &competicionInt);
+
+            ListaModalidades lMod;
+            cargarModalidades(db, &lMod);
+            imprimirModalidades(lMod);
+            int modalidadInt;
+            printf("Seleccione la modalidad: ");
+            fflush(stdout);
+            fgets(linea, 3, stdin);
+            sscanf(linea, "%i", &modalidadInt);
+
+            cargarRanking(db, &rank, modalidadInt, competicionInt);
+            imprimirRanking(rank);
+
+            printf("\nElija lo que quiere hacer: \n");
+            printf("    1-Seleccionar competidor \n");
+            printf("    2-Salir \n");
+            fflush(stdout);
+            char linea[3];
+	        fgets(linea, 3, stdin);
+            sscanf(linea, "%i", &opcionint);
+            printf("la opcion seleccionada es: %i\n", opcionint);
+            switch (opcionint) {
+                case 1:;
+                    int competidorInt;
+                    printf("Seleccione al competidor: ");
+                    fflush(stdout);
+                    fgets(linea, 3, stdin);
+                    sscanf(linea, "%i", &competidorInt);
+                    competidorInt--;
+
+                    int opcionedicion = 0;
+                    int modificar = 0;
+                    while (opcionedicion!=2 && opcionedicion!=3) {
+                        modificar = 0;
+                        system("cls");
+
+                        printf("%s", rank.compite[competidorInt].dniPer);
+
+                        printf("Los datos del competidor seleccionado son:\n");
+                        printf("    DNI:    %s\n", rank.compite[competidorInt].dniPer);
+                        printf("    Nombre:    %s\n", rank.compite[competidorInt].nomPer);
+                        printf("    Lanzamiento: %f\n", rank.compite[competidorInt].lanzamiento);
+                        printf("Elija lo que quiere hacer:\n");
+                        printf("    1- Modificar Lanzamiento\n");
+                        printf("    2- Eliminar este competidor de este ranking\n");
+                        printf("    3- SALIR\n");
+                        printf("NOTA: No se puede modificar el DNI ni el nombre, para modificar el DNI tendra que eliminar al atleta desde el menu de atleta y para modificar el nombre tendra que modificar al atleta desde su menu\n");
+                        printf("Seleccione una opcion:");
+                        fflush(stdout);
+                        fgets(linea, 3, stdin);
+                        sscanf(linea, "%i", &opcionedicion);
+                        printf("la opcion seleccionada es: %i\n",opcionedicion);
+
+                        switch (opcionedicion)
+                        {
+                        case 1:;
+                            strcpy(newstr,"");
+                            printf("Nueva puntuacion de lanzamiento: ");
+                            fflush(stdout);
+                            fgets(newstr, 40, stdin);
+                            limpiarFinales(newstr);
+                            lanzamiento = atof(newstr);
+                            rank.compite[competidorInt].lanzamiento = lanzamiento;
+                            
+                            modificar = 1;
+                            break;
+
+                        case 2:;
+                            deleteCompetidor(db, rank.compite[competidorInt]);
+                            break;
+                        
+                        default:
+                            break;
+                        }
+                        if (modificar == 0) {
+                            actualizarCompetidor(db, rank.compite[competidorInt]);
+                        }
+                    }
+                    break;
+
+                    case 2:;
+                    break;
+            } break;
+
+            case 2:; //Anyadir Competidor
+                    Compite nuevoCompetidor;
+
+                    //ListaPais lPais;
+                    cargarPaises(db, &lPais);
+                    imprimirPais(lPais);
+                    //int paisInt;
+                    printf("Seleccione el pais: ");
+                    fflush(stdout);
+                    fgets(newstr, 3, stdin);
+                    sscanf(newstr, "%i", &paisInt);
+
+                    //ListaCompeticion lComp;
+                    cargarCompeticionesPorPais(db, &lComp, paisInt);
+                    imprimirCompeticiones(lComp);
+                    //int competicionInt;
+                    printf("Seleccione la competicion: ");
+                    fflush(stdout);
+                    fgets(newstr, 3, stdin);
+                    sscanf(newstr, "%i", &competicionInt);
+                    nuevoCompetidor.codCompeticion = competicionInt;
+
+                    //ListaModalidades lMod;
+                    cargarModalidades(db, &lMod);
+                    imprimirModalidades(lMod);
+                    //int modalidadInt;
+                    printf("Seleccione la modalidad: ");
+                    fflush(stdout);
+                    fgets(newstr, 3, stdin);
+                    sscanf(newstr, "%i", &modalidadInt);
+                    nuevoCompetidor.codModalidad = modalidadInt;
+
+                    ListaPersona lPer;
+                    cargarAtletas(db, &lPer);
+                    imprimirAtletas(lPer);
+                    int personaInt;
+                    printf("Seleccione una persona: ");
+                    fflush(stdout);
+                    fgets(newstr, 3, stdin);
+                    sscanf(newstr, "%i", &personaInt);
+                    strcpy(nuevoCompetidor.dniPer, lPer.persona[personaInt-1].dni);
+                    strcpy(nuevoCompetidor.nomPer, lPer.persona[personaInt-1].nombre);
+
+                    double lanzamiento;
+                    printf("Introduce una puntuacion de lanzamiento: ");
+                    fflush(stdout);
+                    fgets(newstr, 10, stdin);
+                    fflush(stdin);
+                    limpiarFinales(newstr);
+                    lanzamiento = atof(newstr);
+                    nuevoCompetidor.lanzamiento = lanzamiento;
+
+                    ainadirCompetidor(db, nuevoCompetidor);
+                    free(rank.compite);
+                    break;
+            
+
+            int opcionEdicion = 0;
+            int modificar = 0;
+            
+            break;
+
+        case 3:;//SALIR
+            break;
+        
+        default:
+            break;
+        }
+
+        
+        break;
     }
 }
 

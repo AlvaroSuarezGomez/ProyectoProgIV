@@ -1,6 +1,7 @@
 #ifndef _COMPETICION_H_
 #define _COMPETICION_H_
 #include "sqlite3.h"
+#include "pais.h"
 
 typedef struct
 {
@@ -21,6 +22,7 @@ typedef struct
 }ListaCompeticion;
 
 int cargarCompeticiones(sqlite3 *db,ListaCompeticion* lcomp);
+int cargarCompeticionesPorPais(sqlite3 *db,ListaCompeticion* lcomp, int codigoPais);
 int ainadirCompeticion(sqlite3 *db, Competicion comp);
 int deleteCompeticion(sqlite3 *db, Competicion comp);
 int actualizarCompeticion(sqlite3 *db, Competicion comp);
