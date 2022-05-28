@@ -9,7 +9,7 @@ int cargarModalidades(sqlite3 *db, ListaModalidades* lmod){
 	char numeroFilas[] = "select count(*) from modalidad ;";
 	int result = sqlite3_prepare_v2(db, numeroFilas, -1, &stmt, NULL);
 	if (result != SQLITE_OK) {
-		printf("Error al cargar los atletas\n");
+		printf("Error al cargar las modalidades\n");
 		printf("%s\n", sqlite3_errmsg(db));
 		return result;
 	}

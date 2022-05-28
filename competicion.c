@@ -9,7 +9,7 @@ int cargarCompeticiones(sqlite3 *db,ListaCompeticion* lcomp){
 	char numeroFilas[] = "select count(*) from competicion ;";
 	int result = sqlite3_prepare_v2(db, numeroFilas, -1, &stmt, NULL);
 	if (result != SQLITE_OK) {
-		printf("Error al cargar los atletas\n");
+		printf("Error al cargar las competiciones\n");
 		printf("%s\n", sqlite3_errmsg(db));
 		return result;
 	}
@@ -33,7 +33,7 @@ int cargarCompeticiones(sqlite3 *db,ListaCompeticion* lcomp){
 
 	result = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
 	if (result != SQLITE_OK) {
-		printf("Error al cargar los atletas\n");
+		printf("Error al cargar las competiciones\n");
 		printf("%s\n", sqlite3_errmsg(db));
 		return result;
 	}

@@ -43,7 +43,7 @@ char menuAdmin(){
 void menuPrincipalAdmin(sqlite3* db) {
 
     int opcionint=0;
-    while(opcionint != 5){
+    while(opcionint != 6){
         //system("cls");
         printf("\nElija lo que quiere hacer: \n");
         printf("    1-Gestionar atletas \n");
@@ -71,7 +71,7 @@ void menuPrincipalAdmin(sqlite3* db) {
             menuLugares(db);
             break;
         case 5:
-            //MENUCOMPETICIONES
+            menuCompeticiones(db);
             break;
         case 6:;//SALIR
             break;
@@ -339,7 +339,7 @@ char menuPais(sqlite3 *db){
             }
             
             break;
-        case 2:;//Ainadir atleta
+        case 2:;//Ainadir pais
             Pais paisNuevo;
 
             printf("Seleccione nuevo codigo(numeros): ");
@@ -368,6 +368,205 @@ char menuPais(sqlite3 *db){
             break;
         }
         free(paises.paises);
+    }
+}
+
+char menuCompeticiones(sqlite3 *db) {
+    ListaCompeticion lcomp;
+    char newstr[200];
+    int opcionint = 0;
+    while (opcionint != 3) {
+        cargarCompeticiones(db, &lcomp);
+        //system("cls");
+        imprimirCompeticiones(lcomp);
+        printf("\nElija lo que quiere hacer: \n");
+        printf("    1-Seleccionar Competicion \n");
+        printf("    2-Ainadir Competicion \n");
+        printf("    3-Salir \n");
+        fflush(stdout);
+        char linea[3];
+        fgets(linea, 3, stdin);
+        sscanf(linea, "%i", &opcionint);
+        printf("La opcion seleccionada es: %i\n", opcionint);
+
+        switch (opcionint)
+        {
+        case 1:;
+            int competicionInt;
+            printf("Seleccione la competición: ");
+            fflush(stdout);
+            fgets(linea, 3, stdin);
+            sscanf(linea, "%i", &competicionInt);
+            competicionInt--;
+
+            int opcionEdicion = 0;
+            int modificar = 0;
+
+            while (opcionEdicion != 4 && opcionEdicion != 5)
+            {
+                modificar = 0;
+                system("cls");
+                printf("Los datos de la competicion seleccionada son:\n");
+                printf("    Codigo:      %i\n", lcomp.competicion[competicionInt].CdCompeticion);
+                printf("    Lugar:      %s\n", lcomp.competicion[competicionInt].lugar);
+                printf("    Organizador: %s\n", lcomp.competicion[competicionInt].organizador);
+                printf("    Nombre:      %s\n", lcomp.competicion[competicionInt].nomCompeticion);
+                printf("    Fecha:      %i-%i-%i\n", lcomp.competicion[competicionInt].dia, lcomp.competicion[competicionInt].mes, lcomp.competicion[competicionInt].ano);
+                printf("Elija lo que quiere hacer:\n");
+                printf("    1- Modificar Organizador\n");
+                printf("    2- Modificar Nombre\n");
+                printf("    3- Modificar Fecha\n");
+                printf("    4- Eliminar esta competicion");
+                printf("    5- SALIR\n");
+                printf("NOTA: No se puede modificar Codigo ni Lugar, si quiere cambiarlo elimine y añada la competicion de nuevo\n");
+                printf("Seleccione una opcion:");
+                fflush(stdout);
+                fgets(linea, 3, stdin);
+                sscanf(linea, "%i", &opcionEdicion);
+                printf("la opcion seleccionada es: %i\n",opcionEdicion);
+
+                switch (opcionEdicion)
+                {
+                case 1:;
+                    strcpy(newstr,"");
+                    printf("Nuevo organizador: ");
+                    fflush(stdout);
+                    fgets(newstr, 40, stdin);
+                    fflush(stdin);
+                    limpiarFinales(newstr);
+                    strcpy(lcomp.competicion[competicionInt].organizador, newstr);
+                    modificar = 1;
+                    
+                    break;
+                
+                case 2:;
+                    strcpy(newstr,"");
+                    printf("Nuevo nombre: ");
+                    fflush(stdout);
+                    fgets(newstr, 40, stdin);
+                    fflush(stdin);
+                    limpiarFinales(newstr);
+                    strcpy(lcomp.competicion[competicionInt].nomCompeticion, newstr);
+                    modificar = 1;
+                    
+                    break;
+
+                case 3:;
+                    strcpy(newstr,"");
+                    printf("Nuevo anyo: ");
+                    fflush(stdout);
+                    fgets(newstr, 40, stdin);
+                    fflush(stdin);
+                    limpiarFinales(newstr);
+                    sscanf(newstr, "%i", lcomp.competicion[competicionInt].ano);
+
+                    fflush(stdout);
+                    strcpy(newstr,"");
+                    printf("Nuevo mes: ");
+                    fflush(stdout);
+                    fgets(newstr, 40, stdin);
+                    fflush(stdin);
+                    limpiarFinales(newstr);
+                    sscanf(newstr, "%i", lcomp.competicion[competicionInt].mes);
+
+                    fflush(stdout);
+                    strcpy(newstr,"");
+                    printf("Nuevo dia: ");
+                    fflush(stdout);
+                    fgets(newstr, 40, stdin);
+                    fflush(stdin);
+                    limpiarFinales(newstr);
+                    sscanf(newstr, "%i", lcomp.competicion[competicionInt].dia);
+
+                    modificar = 1;
+
+
+                    break;
+
+                case 4:;
+                    deleteCompeticion(db, lcomp.competicion[competicionInt]);
+                    break;
+
+                default:
+                    break;
+                }
+                if(modificar == 0){
+                    actualizarCompeticion(db, lcomp.competicion[competicionInt]);
+                }
+            }
+            
+            break;
+
+        case 2:;
+
+        Competicion nuevaComp;
+
+        printf("Seleccione nuevo codigo(numeros): ");
+            fflush(stdout);
+            fgets(newstr, 10, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            sscanf(newstr, "%i", &nuevaComp.CdCompeticion);
+
+            ListaLugar lLugar;
+            cargarLugares(db, &lLugar);
+            imprimirLugares(lLugar);
+            printf("Seleccione un lugar: ");
+            fflush(stdout);
+            fgets(newstr, 10, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            sscanf(newstr, "%i", &nuevaComp.CdLugar);
+
+            printf("Seleccione un nombre de organizador: ");
+            fflush(stdout);
+            fgets(newstr, 50, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            strcpy(nuevaComp.organizador, newstr);
+
+            printf("Seleccione un nombre para la competicion: ");
+            fflush(stdout);
+            fgets(newstr, 50, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            strcpy(nuevaComp.nomCompeticion, newstr);
+
+            printf("Seleccione un año: ");
+            fflush(stdout);
+            fgets(newstr, 10, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            sscanf(newstr, "%i", &nuevaComp.ano);
+
+            printf("Seleccione un mes: ");
+            fflush(stdout);
+            fgets(newstr, 10, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            sscanf(newstr, "%i", &nuevaComp.mes);
+
+            printf("Seleccione un dia: ");
+            fflush(stdout);
+            fgets(newstr, 10, stdin);
+            fflush(stdin);
+            limpiarFinales(newstr);
+            sscanf(newstr, "%i", &nuevaComp.dia);
+
+            ainadirCompeticion(db, nuevaComp);
+            free(lcomp.competicion);
+            cargarCompeticiones(db, &lcomp);
+            break;
+
+        case 3:;//SALIR
+            break;
+        
+        default:
+            break;
+        }
+
+        
+        break;
     }
 }
 
@@ -459,7 +658,7 @@ char menuModalidades(sqlite3 *db){
             }
             
             break;
-        case 2:;//Ainadir atleta
+        case 2:;//Ainadir modalidad
             Modalidad nuevaModalidad;
 
             printf("Seleccione nuevo codigo(numeros): ");
@@ -606,7 +805,7 @@ char menuLugares(sqlite3 *db){
             }
             
             break;
-        case 2:;//Ainadir atleta
+        case 2:;//Ainadir pais
             Lugar lugarNuevo;
 
             printf("Seleccione nuevo codigo(numeros): ");
