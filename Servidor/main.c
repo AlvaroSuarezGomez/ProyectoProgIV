@@ -5,18 +5,16 @@
 #include <stdlib.h>
 #include "funcionesBD.h"
 #include "pais.h"
-#include "competicion.h"
-#include "modalidad.h"
-#include "ranking.h"
 #include <conio.h>
 #include "atleta.h"
 #include "pais.h"
+#include "ranking.h"
+#include "competicion.h"
+#include "modalidad.h"
 #define CONTRASENA "admin"
 #define BORRAR 8
 #define ENTER 13
 //gcc main.c funciones.c funcionesBD.c sqlite3.c -o aaa.exe
-
-//gcc atleta.c pais.c lugar.c competicion.c modalidad.c ranking.c funciones.c funcionesBD.c sqlite3.c main.c -o testModular.exe
 int main(void){
     FILE* ficherolog;
     ficherolog = fopen("logger.txt", "w");

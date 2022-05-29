@@ -2,7 +2,4 @@ Empezamos
 Comienzo de Programa:
 
 Se ha seleccionado la opcion 2(1- Admin 2- Usuario)
-Menu principal mostrado y selecciona opcion 1
-Comenzando carga de atletas...
-Menu principal mostrado y selecciona opcion 2
 Menu principal mostrado y selecciona opcion 3
