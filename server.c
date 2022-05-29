@@ -9,6 +9,7 @@
 #include "modalidad.h"
 #include "competicion.h"
 #include "lugar.h"
+#include "server.h"
 
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 6000
@@ -100,7 +101,7 @@ int main(int argc, char *argv[]) {
 			} else if (strncmp(recvBuff, "01",BYTES) == 0){ //Envia una lista con los ATLETAS
                 ListaPersona lper;
                 result = cargarAtletas(db, &lper);
-                stringLper(lper,&sendBuff);
+                stringLper(lper,sendBuff);
                 send(comm_socket, sendBuff, sizeof(sendBuff), 0);
             } else if (strncmp(recvBuff, "02",2) == 0){ //Envia una lista con los PAISES
 				ListaPais lpais;
@@ -110,12 +111,12 @@ int main(int argc, char *argv[]) {
 			} else if(strncmp(recvBuff, "03",BYTES) == 0){ //Envia una lista con las COMPETICIONES
 				ListaCompeticion lcomp;
 				result = cargarCompeticiones(db, &lcomp);
-				stringcompeticion(lcomp, &lcomp);
+				stringcompeticion(lcomp, sendBuff);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 			} else if(strncmp(recvBuff, "04",BYTES) == 0){ //Envia una lista con las LUGAR
 				ListaLugar llug;
 				result = cargarLugares(db, &llug);
-				stringlugar(llug, sendBuff);
+				stringlugar(llug,sendBuff);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 			} else if(strncmp(recvBuff, "05",BYTES) == 0){ //Envia una lista con las MODALIDADES
 				ListaModalidades lmod; 

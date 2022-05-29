@@ -5,7 +5,6 @@
 #include <string.h>
 #include <windows.h>
 #include "atleta.h"
-#include "pais.h"
 #include "competicion.h"
 #include "modalidad.h"
 #include "lugar.h"
