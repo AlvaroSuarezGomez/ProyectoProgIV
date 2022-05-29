@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include "funcionesBD.h"
 #include "pais.h"
+#include "competicion.h"
+#include "modalidad.h"
+#include "ranking.h"
 #include <conio.h>
 #include "atleta.h"
 #include "pais.h"
@@ -12,6 +15,8 @@
 #define BORRAR 8
 #define ENTER 13
 //gcc main.c funciones.c funcionesBD.c sqlite3.c -o aaa.exe
+
+//gcc atleta.c pais.c lugar.c competicion.c modalidad.c ranking.c funciones.c funcionesBD.c sqlite3.c main.c -o testModular.exe
 int main(void){
     FILE* ficherolog;
     ficherolog = fopen("logger.txt", "w");
@@ -115,10 +120,40 @@ int main(void){
                             break;
                         case '2': ;
                                 system("cls");
-                                ListaPais paises;
-                                ListaPais* paisesp = &paises;
-                                result = cargarPaises(db, paisesp);
-                                imprimirPais(paises);
+                                Ranking rank;
+                                char linea[3];
+
+                                ListaPais lPais;
+                                cargarPaises(db, &lPais);
+                                imprimirPais(lPais);
+                                int paisInt;
+                                printf("Seleccione el pais: ");
+                                fflush(stdout);
+                                fgets(linea, 3, stdin);
+                                sscanf(linea, "%i", &paisInt);
+
+                                ListaCompeticion lComp;
+                                cargarCompeticionesPorPais(db, &lComp, paisInt);
+                                imprimirCompeticiones(lComp);
+                                int competicionInt;
+                                printf("Seleccione la competicion: ");
+                                fflush(stdout);
+                                fgets(linea, 3, stdin);
+                                sscanf(linea, "%i", &competicionInt);
+
+                                ListaModalidades lMod;
+                                cargarModalidades(db, &lMod);
+                                imprimirModalidades(lMod);
+                                int modalidadInt;
+                                printf("Seleccione la modalidad: ");
+                                fflush(stdout);
+                                fgets(linea, 3, stdin);
+                                sscanf(linea, "%i", &modalidadInt);
+
+                                cargarRanking(db, &rank, modalidadInt, competicionInt);
+                                
+                                imprimirRanking(rank);
+                                free(rank.compite);
                             break;
                         case '3':
                             system("cls");
