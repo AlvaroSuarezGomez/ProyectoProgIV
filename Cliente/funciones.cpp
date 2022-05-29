@@ -1,15 +1,19 @@
 #include "funciones.h"
-#include "pais.h"
+//#include "pais.h"
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
-#include "atleta.h"
-#include "competicion.h"
-#include "modalidad.h"
-#include "lugar.h"
-#include "ranking.h"
+//#include "atleta.h"
+//#include "competicion.h"
+//#include "modalidad.h"
+//#include "lugar.h"
+//#include "ranking.h"
 #include <winsock2.h>
+#include <iostream>
 // para linux usar #include <unistd.h>
+
+using namespace std;
+
 
 void limpiarLineas(char *texto, int capacidadaxima)
 {
@@ -18,75 +22,72 @@ void limpiarLineas(char *texto, int capacidadaxima)
 }
 
 char menuPrincipal(){
-    printf("Elija lo que quiere hacer: \n");
-    printf("    1-Ensenar Atletas \n");
-    printf("    2-Ver ranking por paises\n"); 
-    printf("    3-Salir\n");
-    printf("Seleccione opcion: \n");
-    fflush(stdout);
+    cout << "Elija lo que quiere hacer: \n" << endl;
+    cout << "    1-Ensenar Atletas \n" << endl;
+    cout << "    2-Ver ranking por paises\n" << endl;
+    cout << "    3-Salir\n" << endl;
+    cout << "Seleccione opcion: \n" << endl;
 	char linea[5];
-	fgets(linea, 3, stdin);
+	cin >> linea;
 	return *linea;
 }
 
 char menuAdmin(){
-    printf("Es usted Admistrador o Usuario?\n");
-    printf("   1-Administrador\n");
-    printf("   2-Usuario\n");
-    fflush(stdout);
+    cout << "Es usted Admistrador o Usuario?\n" << endl;
+    cout << "   1-Administrador\n" << endl;
+    cout << ("   2-Usuario\n") << endl;
 	char linea[3];
-	fgets(linea, 3, stdin);
+	cin >> linea;
 	return *linea;
 }
 
-void menuPrincipalAdmin(sqlite3* db) {
+void menuPrincipalAdmin() {
 
     int opcionint=0;
     while(opcionint != 7){
         //system("cls");
-        printf("\nElija lo que quiere hacer: \n");
-        printf("    1-Gestionar atletas \n");
-        printf("    2-Gestionar paises \n");
-        printf("    3-Gestionar modalidades \n");
-        printf("    4-Gestionar lugares\n");
-        printf("    5-Gestionar competiciones\n");
-        printf("    6-Gestionar rankings\n");
-        printf("    7-Salir \n");
-        fflush(stdout);
+        cout << "\nElija lo que quiere hacer: \n" << endl;
+        cout << "    1-Gestionar atletas \n" << endl;
+        cout << "    2-Gestionar paises \n" << endl;
+        cout << "    3-Gestionar modalidades \n" << endl;
+        cout << "    4-Gestionar lugares\n" << endl;
+        cout << "    5-Gestionar competiciones\n" << endl;
+        cout << "    6-Gestionar rankings\n" << endl;
+        cout << "    7-Salir \n" << endl;
         char linea[3];
-	    fgets(linea, 3, stdin);
-        sscanf(linea, "%i", &opcionint);
-        printf("la opcion seleccionada es: %i\n", opcionint);
+	    cin >> opcionint;
+        //sscanf(linea, "%i", &opcionint);
+        cout << "la opcion seleccionada es: " << opcionint << endl;
         switch (opcionint)
         {
         case 1:;
-            menuPersona(db);
+            //menuPersona(db);
             break;
         case 2:
-            menuPais(db);
+            //menuPais(db);
             break;
         case 3:
-            menuModalidades(db);
+            //menuModalidades(db);
         case 4:
-            menuLugares(db);
+            //menuLugares(db);
             break;
         case 5:
-            menuCompeticiones(db);
+            //menuCompeticiones(db);
             break;
         case 6:
-            menuRanking(db);
+            //menuRanking(db);
             break;
         case 7:;//SALIR
             break;
         default:
-            printf("Caso no contemplado\n");
+            cout << "Caso no contemplado\n" << endl;
             break;
         }
     }
 
 }
 
-char menuPersona(sqlite3 *db){
+/*char menuPersona(sqlite3 *db){
     ListaPais paises;
     ListaPersona lper;
     char newstr[20];
@@ -1056,6 +1057,7 @@ char menuRanking(sqlite3* db) {
         break;
     }
 }
+*/
 
 void cargarDatosPostu(){
     printf("Cargando \n");

@@ -1,19 +1,20 @@
 #include "funciones.h"
-#include "sqlite3.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "funcionesBD.h"
-#include "pais.h"
+//#include "pais.h"
 #include <conio.h>
-#include "atleta.h"
-#include "pais.h"
-#include "ranking.h"
-#include "competicion.h"
-#include "modalidad.h"
+//#include "atleta.h"
+//#include "pais.h"
+//#include "ranking.h"
+//#include "competicion.h"
+//#include "modalidad.h"
+#include <iostream>
 #define CONTRASENA "admin"
 #define BORRAR 8
 #define ENTER 13
+
+using namespace std;
 //gcc main.c funciones.c funcionesBD.c sqlite3.c -o aaa.exe
 //gcc atleta.c pais.c lugar.c competicion.c modalidad.c ranking.c funciones.c funcionesBD.c sqlite3.c main.c -o testModular.exe
 int main(void){
@@ -32,14 +33,7 @@ int main(void){
     char contrasena[21];
     char encriptar;
     // int opcionIntro;
-    
-    sqlite3 *db;
-    int result = sqlite3_open("Basededatos.sqlite", &db);
-	if (result != SQLITE_OK) {
-		printf("Error opening database\n");
-		return result;
-	}
-    crearTablas(db);
+
     
     /*while(opcionIntro!=1 && opcionIntro!=2){  Opcion posible??
         printf("Es usted Admistrador o Usuario?\n");
@@ -59,7 +53,7 @@ int main(void){
                 do{
                     int i = 0; 
                     system("cls");
-                    printf("Contrasena: ");
+                    cout << "Contrasena: ";
                     
                     while(encriptar = getch()){
                         if(encriptar==ENTER){
@@ -68,10 +62,10 @@ int main(void){
                         }else if(encriptar==BORRAR){
                             if (i == 0) continue;
                             i--;
-                            printf("\b \b");
+                            cout << "\b \b";
                         
                         }else{
-                            printf("*");
+                            cout << "*";
                             contrasena[i]=encriptar;
                             i++;
                         }
@@ -80,11 +74,11 @@ int main(void){
                     
                     if(strcmp(CONTRASENA,contrasena)==0){
                         system("cls");
-                        ListaPersona lper;
-                        result = cargarAtletas(db, &lper); 
+                        //ListaPersona lper;
+                        //result = cargarAtletas(db, &lper); 
                          
-                        menuPrincipalAdmin(db);
-                        free(lper.persona);
+                        menuPrincipalAdmin();
+                        //free(lper.persona);
                         acierto++;
                     }else{
                         printf("\n");
@@ -107,7 +101,7 @@ int main(void){
                     fclose(ficherolog);
                     switch (opcion){
                         case '1':;
-                            system("cls");
+                            /*system("cls");
                             ficherolog = fopen("logger.txt", "a");
                             fprintf(ficherolog, "Comenzando carga de atletas...\n");
                             fclose(ficherolog); 
@@ -115,9 +109,10 @@ int main(void){
                             result = cargarAtletas(db, &lper); 
                             imprimirAtletas(lper);
                         
-                            free(lper.persona);
+                            free(lper.persona);*/
                             break;
                         case '2': ;
+                        /*
                                 system("cls");
                                 Ranking rank;
                                 char linea[3];
@@ -153,6 +148,7 @@ int main(void){
                                 
                                 imprimirRanking(rank);
                                 free(rank.compite);
+                                */
                             break;
                         case '3':
                             system("cls");
@@ -167,6 +163,6 @@ int main(void){
 
     //}
     
-    sqlite3_close(db);
+    //sqlite3_close(db);
     return 0;
 }
