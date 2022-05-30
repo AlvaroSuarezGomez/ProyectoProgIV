@@ -18,7 +18,7 @@
 //gcc atleta.c pais.c lugar.c competicion.c modalidad.c ranking.c funciones.c funcionesBD.c sqlite3.c admin.c -o admin.exe
 int main(void){
     FILE* ficherolog;
-    ficherolog = fopen("logger.txt", "w");
+    ficherolog = fopen("loggerAdmin.txt", "w");
     fprintf(ficherolog, "Empezamos\n");
     fclose(ficherolog);
     ficherolog = fopen("logger.txt", "a");
@@ -37,6 +37,8 @@ int main(void){
 	}
     crearTablas(db);
     ficherolog = fopen("logger.txt", "a");
+    fprintf(ficherolog, "Base de datos cargada:\n\n");
+    fclose(ficherolog);
     do {
         int i = 0;
         system("cls");
@@ -57,7 +59,10 @@ int main(void){
                 i++;
             }
         }
+       
+        
         if (strcmp(CONTRASENA, contrasena) == 0) {
+            fprintf(ficherolog, "Contraseña bien introducida, comenzando el programa\n\n");
             system("cls");
             ListaPersona lper;
             result = cargarAtletas(db, &lper);
@@ -66,6 +71,7 @@ int main(void){
             acierto++;
         }
         else {
+            fprintf(ficherolog, "Contraseña incorrecta introducida\n\n");
             printf("\n");
             printf("Contrasena incorrecta");
             fallo++;
@@ -73,5 +79,7 @@ int main(void){
         }
     } while (acierto == 0 && fallo < maxFallo);
     sqlite3_close(db);
+    fprintf(ficherolog, "Programa finalizado\n\n");
+    fclose(ficherolog);
     return 0;
 }
