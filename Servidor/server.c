@@ -198,7 +198,7 @@ int main(int argc, char *argv[]) {
 
         }
     }while (1);
-	close(ficherolog);
+	fclose(ficherolog);
 }
 
 
@@ -316,7 +316,7 @@ void stringRanking(Ranking rank, char* stringfinal){
 		strcat(stringfinal, casteo);
 		strcpy(casteo, "");
 		strcat(stringfinal, "$");
-		sprintf(casteo, "%f", rank.compite[i].codCompeticion);
+		sprintf(casteo, "%f", rank.compite[i].lanzamiento);
 		strcat(stringfinal, casteo);
 		strcat(stringfinal, "$");
 	}

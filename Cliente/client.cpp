@@ -81,6 +81,7 @@ int main(void) {
 	
 
 	// CLOSING the socket and cleaning Winsock...
+	send(s, "00", 512, 0);
 	closesocket(s);
 	WSACleanup();
 
