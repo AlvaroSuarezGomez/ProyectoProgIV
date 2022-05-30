@@ -535,9 +535,9 @@ char menuCompeticiones(sqlite3 *db) {
             limpiarFinales(newstr);
             strcpy(nuevaComp.nomCompeticion, newstr);
 
-            printf("Seleccione un año: ");
+            printf("Seleccione un ano: ");
             fflush(stdout);
-            fgets(newstr, 10, stdin);
+            fgets(newstr, 50, stdin);
             fflush(stdin);
             limpiarFinales(newstr);
             sscanf(newstr, "%i", &nuevaComp.ano);
