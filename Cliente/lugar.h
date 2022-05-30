@@ -16,12 +16,7 @@ typedef struct
     Lugar* lugar;
 }ListaLugar;
 
-/*
-int cargarLugares(sqlite3* db, ListaLugar* llugar);
-int ainadirLugar(sqlite3 *db, Lugar lugar);
-int deleteLugar(sqlite3 *db, Lugar lugar);
-int actualizarLugar(sqlite3 *db, Lugar lugar);
-*/
+
 void imprimirLugares(ListaLugar llugar);
 
 #endif

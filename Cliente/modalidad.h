@@ -16,10 +16,7 @@ typedef struct
 }ListaModalidades;
 
 
-//int cargarModalidades(sqlite3 *db, ListaModalidades* lmod);
-//int ainadirModalidad(sqlite3 *db, Modalidad modalidad);
-//int deleteModalidad(sqlite3 *db, Modalidad modalidad);
-//int actualizarModalidad(sqlite3 *db, Modalidad modalidad);
+
 void imprimirModalidades(ListaModalidades lmod);
 
 #endif

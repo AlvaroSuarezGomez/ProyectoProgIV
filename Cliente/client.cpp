@@ -69,19 +69,6 @@ int main(void) {
     fclose(ficherolog);
     char opcion;
     char opcionIntro;
-    int fallo = 0;
-    int acierto = 0;
-    int maxFallo = 5;
-    char contrasena[21];
-    char encriptar;
-    // int opcionIntro;
-
-    
-    /*while(opcionIntro!=1 && opcionIntro!=2){  Opcion posible??
-        printf("Es usted Admistrador o Usuario?\n");
-        printf("   1-Administrador\n");
-        printf("   2-Usuario\n");
-        scanf("%i", &opcionIntro);*/
 
 
         ficherolog = fopen("logger.txt", "a");
@@ -91,9 +78,6 @@ int main(void) {
                     ficherolog = fopen("logger.txt", "a");
                     fprintf(ficherolog, "Menu principal mostrado y selecciona opcion %c\n", opcion);
                     fclose(ficherolog);
-    //}
-    
-    //sqlite3_close(db);
 	
 
 	// CLOSING the socket and cleaning Winsock...
