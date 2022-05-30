@@ -19,6 +19,9 @@
 #define TAMAINO_RECVBUFF 512
 #define BYTES 2
 int main(int argc, char *argv[]) {
+	FILE* ficherolog;
+    ficherolog = fopen("loggerserver.txt", "w");
+    
 
 	WSADATA wsaData;
 	SOCKET conn_socket;
@@ -34,14 +37,14 @@ int main(int argc, char *argv[]) {
 	}
 
 	printf("Initialised.\n");
-
+	fprintf(ficherolog, "Server iniciado\n");
 	//SOCKET creation
 	if ((conn_socket = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
 		printf("Could not create socket : %d", WSAGetLastError());
 		WSACleanup();
 		return -1;
 	}
-
+	fprintf(ficherolog, "Server inicializado\n");
 	printf("Socket created.\n");
 
 	server.sin_addr.s_addr = inet_addr(SERVER_IP);
@@ -58,7 +61,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	printf("Bind done.\n");
-
+	fprintf(ficherolog, "Conexion realizada\n");
 	//LISTEN to incoming connections (socket server moves to listening mode)
 	if (listen(conn_socket, 1) == SOCKET_ERROR) {
 		printf("Listen failed with error code: %d", WSAGetLastError());
@@ -91,6 +94,7 @@ int main(int argc, char *argv[]) {
 		printf("Error opening database\n");
 		return result;
 	}
+	fprintf(ficherolog, "Base de datos cargada\n");
 	//SEND and RECEIVE data
 	printf("Waiting for incoming petition from Deustopic Client... \n");
 	do {
@@ -98,35 +102,41 @@ int main(int argc, char *argv[]) {
         if(bytes > 0){
             printf("Code received: %s \n", recvBuff);
             if (strncmp(recvBuff, "00",BYTES) == 0) { // Close Server
+				fprintf(ficherolog, "Servidor cerrado\n");
 				break;
 
 			} else if (strncmp(recvBuff, "01",BYTES) == 0){ //Envia una lista con los ATLETAS
                 ListaPersona lper;
                 result = cargarAtletas(db, &lper);
                 stringLper(lper,sendBuff);
+				fprintf(ficherolog, "Enviado: %s \n", sendBuff);
                 send(comm_socket, sendBuff, sizeof(sendBuff), 0);
             } else if (strncmp(recvBuff, "02",2) == 0){ //Envia una lista con los PAISES
 				ListaPais lpais;
 				result = cargarPaises(db, &lpais);
 				stringlpais(lpais, sendBuff);
+				fprintf(ficherolog, "Enviado: %s \n", sendBuff);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 			} else if(strncmp(recvBuff, "03",BYTES) == 0){ //Envia una lista con las COMPETICIONES
 				ListaCompeticion lcomp;
 				result = cargarCompeticiones(db, &lcomp);
 				stringcompeticion(lcomp, sendBuff);
+				fprintf(ficherolog, "Enviado: %s \n", sendBuff);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 			} else if(strncmp(recvBuff, "04",BYTES) == 0){ //Envia una lista con las LUGAR
 				ListaLugar llug;
 				result = cargarLugares(db, &llug);
 				stringlugar(llug,sendBuff);
+				fprintf(ficherolog, "Enviado: %s \n", sendBuff);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 			} else if(strncmp(recvBuff, "05",BYTES) == 0){ //Envia una lista con las MODALIDADES
 				ListaModalidades lmod; 
 				result = cargarModalidades(db, &lmod);
 				stringlmodalidad(lmod, sendBuff);
+				fprintf(ficherolog, "Enviado: %s \n", sendBuff);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 			} else if(strncmp(recvBuff, "06",BYTES) == 0){ //Recive un CD_PAIS y envia las competiciones que 
-				
+				fprintf(ficherolog, "Recivido: %s \n", recvBuff);
 				int cdPais = 0;
 				char* lastchar = &recvBuff[0];
 				char frase[TAMAINO_RECVBUFF];
@@ -146,12 +156,14 @@ int main(int argc, char *argv[]) {
 				cargarCompeticionesPorPais(db, &lcomp, cdPais);
 				stringcompeticion(lcomp, sendBuff);
 				printf(sendBuff);
+				fprintf(ficherolog, "Enviado: %s \n", sendBuff);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 			//Envia al servidor un CD_MOD y CD_COMP
             //CD$CD_MOD$CD_COMP$
 			}else if(strncmp(recvBuff, "07",BYTES) == 0){//Recibe CD_MOD y CD_COMP y devuelve un Ranking
 				char* lastchar = &recvBuff[0];
 				char frase[TAMAINO_RECVBUFF];
+				fprintf(ficherolog, "Recivido: %s \n", recvBuff);
 				while(lastchar[0] != '$'){
 					lastchar++;
 				}
@@ -178,6 +190,7 @@ int main(int argc, char *argv[]) {
 				Ranking rank;
 				cargarRanking(db, &rank, cdmod, cdcomp);
 				stringRanking(rank, sendBuff);
+				fprintf(ficherolog, "Enviado: %s \n", sendBuff);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 			}
 				
@@ -185,6 +198,7 @@ int main(int argc, char *argv[]) {
 
         }
     }while (1);
+	close(ficherolog);
 }
 
 
