@@ -12,6 +12,7 @@
 #include "server.h"
 #include "ranking.h"
 
+//gcc funciones.c pais.c lugar.c modalidad.c funcionesBD.c competicion.c sqlite3.c atleta.c ranking.c server.c  -o testServer.exe -lws2_32
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 6000
 #define TAMAINO_SENDBUFF 1024
@@ -144,6 +145,7 @@ int main(int argc, char *argv[]) {
 				ListaCompeticion lcomp;
 				cargarCompeticionesPorPais(db, &lcomp, cdPais);
 				stringcompeticion(lcomp, sendBuff);
+				printf(sendBuff);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 			//Envia al servidor un CD_MOD y CD_COMP
             //CD$CD_MOD$CD_COMP$

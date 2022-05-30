@@ -41,7 +41,7 @@ void menuPrincipal(SOCKET s, char sendBuff[512], char recvBuff[512]) {
     {
         case 1:;
             send(s, "01", 512, 0);
-            recv(s, recvBuff, 512, 0);
+            recv(s, recvBuff, 1024, 0);
             ListaPersona lPer;
             desconversorlper(&lPer, recvBuff);
             imprimirAtletas(lPer);
@@ -50,7 +50,7 @@ void menuPrincipal(SOCKET s, char sendBuff[512], char recvBuff[512]) {
             char opcionPais[512];
 
             send(s, "02", 512, 0);
-            recv(s, recvBuff, 512, 0);
+            recv(s, recvBuff, 1024, 0);
             ListaPais lPais;
             desconversorlpais(&lPais, recvBuff);
             imprimirPais(lPais);
@@ -104,7 +104,7 @@ void menuPrincipalAdmin(SOCKET s, char sendBuff[512], char recvBuff[512]) {
         {
         case 1:;
             send(s, "01", 512, 0);
-            recv(s, recvBuff, 512, 0);
+            recv(s, recvBuff, 1024, 0);
             break;
         case 2:
             //menuPais(db);

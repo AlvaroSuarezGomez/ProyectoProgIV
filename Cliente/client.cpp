@@ -24,7 +24,7 @@ int main(void) {
     WSADATA wsaData;
 	SOCKET s;
 	struct sockaddr_in server;
-	char sendBuff[512], recvBuff[512];
+	char sendBuff[512], recvBuff[1024];
 
 	printf("\nInitialising Winsock...\n");
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {

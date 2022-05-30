@@ -52,6 +52,7 @@ int cargarRanking(sqlite3 *db, Ranking* ranking, int codModalidad, int codCompet
 
 	do {
 		if (result == SQLITE_ROW) {
+
 			strcpy(ranking->compite[i].dniPer, sqlite3_column_text(stmt, 0));
 			ranking->compite[i].codModalidad = sqlite3_column_int(stmt, 1);
 			ranking->compite[i].codCompeticion = sqlite3_column_int(stmt, 2);
@@ -59,6 +60,7 @@ int cargarRanking(sqlite3 *db, Ranking* ranking, int codModalidad, int codCompet
 			strcpy(ranking->compite[i].nomPer, sqlite3_column_text(stmt, 4));
 			i++;
 			result = sqlite3_step(stmt);
+			printf(ranking->compite[i].dniPer);
 			
 
 		}
