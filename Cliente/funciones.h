@@ -1,11 +1,25 @@
 #ifndef _FUNCIONES_H_
 #define _FUNCIONES_H_
+#include <winsock2.h>
+
+#include "atleta.h"
+#include "desconversor.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+//
+// ... prototypes for C_library go here ...
+//
+
+#ifdef __cplusplus
+}
+#endif
 
 char menuAdmin();
-char menuPrincipal();
+void menuPrincipal(SOCKET s, char sendBuff[512], char recvBuff[512]);
 char menuPaises();
 char mostrarMenu();
-void menuPrincipalAdmin();
+void menuPrincipalAdmin(SOCKET s, char sendBuff[512], char recvBuff[512]);
 
 /*char menuPersona(sqlite3 *db);
 char menuPais(sqlite3 *db);

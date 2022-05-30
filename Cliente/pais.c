@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+/*
 int cargarPaises(sqlite3 *db,ListaPais* lpais){
     sqlite3_stmt *stmt;
 	char numeroFilas[] = "select count(*) from pais ;";
@@ -173,7 +174,7 @@ int actualizarPais(sqlite3 *db, Pais pais){
 	}
 	return SQLITE_OK;
 	
-}
+}*/
 
 void imprimirPais(ListaPais lpais){
 	for(int i = 0; i<lpais.tamanyo;i++){

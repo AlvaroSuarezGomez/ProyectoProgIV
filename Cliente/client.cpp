@@ -5,12 +5,14 @@
 #include <stdio.h>
 #include <windows.h>
 #include "funciones.h" 
-#include "pais.h"
-#include "atleta.h"
+//#include "pais.h"
+//#include "atleta.h"
 #include <winsock2.h>
 #define CONTRASENA "admin"
 #define BORRAR 8
 #define ENTER 13
+#define SERVER_IP "127.0.0.1"
+#define SERVER_PORT 6000
 
 using namespace std;
 
@@ -55,6 +57,42 @@ int main(void) {
 			ntohs(server.sin_port));
 
 	// SEND and RECEIVE data
+
+	FILE* ficherolog;
+    ficherolog = fopen("logger.txt", "w");
+    fprintf(ficherolog, "Empezamos\n");
+    fclose(ficherolog);
+    ficherolog = fopen("logger.txt", "a");
+    fprintf(ficherolog, "Comienzo de Programa:\n\n");
+    fclose(ficherolog);
+    char opcion;
+    char opcionIntro;
+    int fallo = 0;
+    int acierto = 0;
+    int maxFallo = 5;
+    char contrasena[21];
+    char encriptar;
+    // int opcionIntro;
+
+    
+    /*while(opcionIntro!=1 && opcionIntro!=2){  Opcion posible??
+        printf("Es usted Admistrador o Usuario?\n");
+        printf("   1-Administrador\n");
+        printf("   2-Usuario\n");
+        scanf("%i", &opcionIntro);*/
+
+
+        ficherolog = fopen("logger.txt", "a");
+        fclose(ficherolog);
+                system("cls");
+                    menuPrincipal(s, sendBuff, recvBuff);
+                    ficherolog = fopen("logger.txt", "a");
+                    fprintf(ficherolog, "Menu principal mostrado y selecciona opcion %c\n", opcion);
+                    fclose(ficherolog);
+    //}
+    
+    //sqlite3_close(db);
+    return 0;
 	
 
 	// CLOSING the socket and cleaning Winsock...

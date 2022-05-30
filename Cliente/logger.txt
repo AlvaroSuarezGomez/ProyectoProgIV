@@ -1,8 +1,4 @@
 Empezamos
 Comienzo de Programa:
 
-Se ha seleccionado la opcion 2(1- Admin 2- Usuario)
-Menu principal mostrado y selecciona opcion 1
-Menu principal mostrado y selecciona opcion 1
-Menu principal mostrado y selecciona opcion 2
-Menu principal mostrado y selecciona opcion 3
+Menu principal mostrado y selecciona opcion ÿ

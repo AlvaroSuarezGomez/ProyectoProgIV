@@ -10,6 +10,8 @@
 //#include "ranking.h"
 #include <winsock2.h>
 #include <iostream>
+
+
 // para linux usar #include <unistd.h>
 
 using namespace std;
@@ -21,15 +23,34 @@ void limpiarLineas(char *texto, int capacidadaxima)
 		while (getchar() != '\n');
 }
 
-char menuPrincipal(){
+void menuPrincipal(SOCKET s, char sendBuff[512], char recvBuff[512]) {
+    int opcionInt = 0;
+    while (opcionInt != 3)
+    {
     cout << "Elija lo que quiere hacer: \n" << endl;
     cout << "    1-Ensenar Atletas \n" << endl;
     cout << "    2-Ver ranking por paises\n" << endl;
     cout << "    3-Salir\n" << endl;
     cout << "Seleccione opcion: \n" << endl;
-	char linea[5];
-	cin >> linea;
-	return *linea;
+	cin >> opcionInt;
+    cout << "la opcion seleccionada es: " << opcionInt << endl;
+
+    switch (opcionInt)
+    {
+        case 1:;
+            send(s, "01", 512, 0);
+            recv(s, recvBuff, 512, 0);
+            ListaPersona lPer;
+            desconversorlper(&lPer, recvBuff);
+            imprimirAtletas(lPer);
+            break;
+        case 2:;
+
+            break;
+        case 3:;
+            break;
+    }
+    }
 }
 
 char menuAdmin(){
@@ -41,7 +62,7 @@ char menuAdmin(){
 	return *linea;
 }
 
-void menuPrincipalAdmin() {
+void menuPrincipalAdmin(SOCKET s, char sendBuff[512], char recvBuff[512]) {
 
     int opcionint=0;
     while(opcionint != 7){
@@ -61,7 +82,8 @@ void menuPrincipalAdmin() {
         switch (opcionint)
         {
         case 1:;
-            //menuPersona(db);
+            send(s, "01", 512, 0);
+            recv(s, recvBuff, 512, 0);
             break;
         case 2:
             //menuPais(db);

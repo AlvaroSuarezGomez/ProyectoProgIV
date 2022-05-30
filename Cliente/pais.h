@@ -13,11 +13,12 @@ typedef struct
     int tamanyo;
 
 }ListaPais;
-
+/*
 int cargarPaises(sqlite3 *db,ListaPais* lpais);
 int ainadirPais(sqlite3 *db, Pais pais);
 int deletePais(sqlite3* db, Pais pais);
 int actualizarPais(sqlite3* db, Pais pais);
+*/
 void imprimirPais(ListaPais lpais);
 
 

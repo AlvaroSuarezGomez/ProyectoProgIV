@@ -138,10 +138,10 @@ int main(int argc, char *argv[]) {
 				}
 				desconversorlper(&lper, frase);
 				ainadirPersona(db, lper.persona[0]);
-			} else if()
-
-        }
-    }while (1);
+			}
+    }
+	}
+	while (1);
 }
 
 

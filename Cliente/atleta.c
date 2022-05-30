@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 
-int cargarAtletas(sqlite3 *db, ListaPersona* lper){
+/*int cargarAtletas(sqlite3 *db, ListaPersona* lper){
     sqlite3_stmt *stmt;
 	char numeroFilas[] = "select count(*) from persona;";
 	int result = sqlite3_prepare_v2(db, numeroFilas, -1, &stmt, NULL);
@@ -61,8 +61,9 @@ int cargarAtletas(sqlite3 *db, ListaPersona* lper){
 	return SQLITE_OK;
 
 
-}
+}*/
 
+/*
 int ainadirPersona(sqlite3 *db, Persona per){
 	
 	sqlite3_stmt *stmt;
@@ -97,8 +98,9 @@ int ainadirPersona(sqlite3 *db, Persona per){
 	}
 	return SQLITE_OK;
 	
-}
+}*/
 
+/*
 int deletePersona(sqlite3* db, Persona per)	{
 	sqlite3_stmt *stmt;
 	char sql[250] = "delete from persona where DNI = ?";
@@ -119,8 +121,9 @@ int deletePersona(sqlite3* db, Persona per)	{
 		return result;
 	}
 	return SQLITE_OK;
-}
+}*/
 
+/*
 int actualizarPersona(sqlite3* db, Persona per) {
 	sqlite3_stmt *stmt;
 	char sql[250] = "update persona set Nombre = ?, Telefono = ?, Cd_Pais = ? where DNI = ?", s;
@@ -145,7 +148,7 @@ int actualizarPersona(sqlite3* db, Persona per) {
 	}
 	return SQLITE_OK;
 }
-
+*/
 void imprimirAtletas(ListaPersona lper){
 	for(int i = 0; i<lper.numero;i++){
 		printf("%i- Nombre: %s   Telefono:  %i   Pais: %s   DNI:  %s\n",i+1, lper.persona[i].nombre, lper.persona[i].telefono, lper.persona[i].pais, lper.persona[i].dni);
