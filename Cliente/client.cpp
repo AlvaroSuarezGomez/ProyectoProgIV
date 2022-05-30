@@ -14,7 +14,7 @@
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 6000
 
-//g++ client.cpp funciones.cpp pais.c atleta.c competicion.c desconversor.c -o testCliente.exe -lws2_32
+//g++ client.cpp funciones.cpp pais.c atleta.c competicion.c desconversor.c modalidad.c ranking.c -o testCliente.exe -lws2_32
 
 using namespace std;
 

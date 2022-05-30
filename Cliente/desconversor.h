@@ -13,5 +13,6 @@ void desconversorllug(ListaLugar* llug, char* frase);
 void desconversorlmod(ListaModalidades* lmod, char* frase);
 void desconversorlper(ListaPersona* lper, char* frase);
 void desconversorlpais(ListaPais* lpais, char* frase);
+void desconversorRanking(Ranking* rank, char* frase);
 
 #endif

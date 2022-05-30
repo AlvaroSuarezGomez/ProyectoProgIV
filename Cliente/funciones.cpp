@@ -48,6 +48,8 @@ void menuPrincipal(SOCKET s, char sendBuff[512], char recvBuff[512]) {
             break;
         case 2:;
             char opcionPais[512];
+            char opcionModalidad[1024];
+            char opcionCompeticion[1024];
 
             send(s, "02", 512, 0);
             recv(s, recvBuff, 1024, 0);
@@ -66,6 +68,26 @@ void menuPrincipal(SOCKET s, char sendBuff[512], char recvBuff[512]) {
             ListaCompeticion lComp;
             desconversorlcomp(&lComp, recvBuff);
             imprimirCompeticiones(lComp);
+
+            cin >> opcionCompeticion;
+            send(s, "05", 512, 0);
+            recv(s, recvBuff, 1024, 0);
+            ListaModalidades lMod;
+            desconversorlmod(&lMod, recvBuff);
+            imprimirModalidades(lMod);
+            cin >> opcionModalidad;
+
+            strcpy(nextCommand, "07$");
+            strcat(nextCommand, opcionModalidad);
+            strcat(nextCommand, "$");
+            strcat(nextCommand, opcionCompeticion);
+            strcat(nextCommand, "$");
+
+            send(s, nextCommand, 512, 0);
+            recv(s, recvBuff, 1024, 0);
+            Ranking rank;
+            desconversorRanking(&rank, recvBuff);
+            imprimirRanking(rank);
 
             break;
         case 3:;
