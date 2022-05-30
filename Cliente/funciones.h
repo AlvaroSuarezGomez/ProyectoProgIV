@@ -25,13 +25,6 @@ void menuPrincipal(SOCKET s, char sendBuff[512], char recvBuff[512]);
 char menuPaises();
 char mostrarMenu();
 void menuPrincipalAdmin(SOCKET s, char sendBuff[512], char recvBuff[512]);
-
-/*char menuPersona(sqlite3 *db);
-char menuPais(sqlite3 *db);
-char menuCompeticiones(sqlite3* db);
-char menuModalidades(sqlite3* db);
-char menuLugares(sqlite3* db);
-char menuRanking(sqlite3* db);*/
 void cargarDatosPostu();
 void monstrarLogo();
 void limpiarFinales(char* str);

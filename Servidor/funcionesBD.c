@@ -197,17 +197,4 @@ int crearTablas(sqlite3* db) {
 }
 
 
-/*
-int main(void){ Pruebas
-	sqlite3 *db;
-	Persona p;
-	ListaPersona lista;
-	p.cdPais = 2;
-	strcpy(p.dni,"47258922V");
-	strcpy(p.nombre,"Alvaro");
-	p.telefono = 4312;
-	int result = sqlite3_open("Basededatos.sqlite", &db);
-	result = ainadirPersona(db,p);
-	result = cargarAtletas(db,&lista);
-	imprimirAtletas(lista);
-}*/
+

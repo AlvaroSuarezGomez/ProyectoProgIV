@@ -15,10 +15,7 @@ typedef struct{
     Persona* persona;
 }ListaPersona;
 
-//int cargarAtletas(sqlite3 *db, ListaPersona* lper);
-//int ainadirPersona(sqlite3 *db, Persona per);
-//int deletePersona(sqlite3* db, Persona per);
-//int actualizarPersona(sqlite3* db, Persona per);
+
 void imprimirAtletas(ListaPersona lper);
 
 #endif
