@@ -1,4 +1,3 @@
 Empezamos
 Comienzo de Programa:
 
-Menu principal mostrado y selecciona opcion ÿ

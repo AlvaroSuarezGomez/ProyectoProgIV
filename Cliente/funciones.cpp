@@ -24,6 +24,8 @@ void limpiarLineas(char *texto, int capacidadaxima)
 }
 
 void menuPrincipal(SOCKET s, char sendBuff[512], char recvBuff[512]) {
+    char nextCommand[512];
+    char nextCommandNum[512];
     int opcionInt = 0;
     while (opcionInt != 3)
     {
@@ -45,6 +47,25 @@ void menuPrincipal(SOCKET s, char sendBuff[512], char recvBuff[512]) {
             imprimirAtletas(lPer);
             break;
         case 2:;
+            char opcionPais[512];
+
+            send(s, "02", 512, 0);
+            recv(s, recvBuff, 512, 0);
+            ListaPais lPais;
+            desconversorlpais(&lPais, recvBuff);
+            imprimirPais(lPais);
+
+            cin >> opcionPais;
+            strcpy(nextCommand, "06$");
+            //sscanf(nextCommandNum, "%i", opcionPais);
+            strcat(nextCommand, opcionPais);
+            strcat(nextCommand, "$");
+
+            send(s, nextCommand, 512, 0);
+            recv(s, recvBuff, 1024, 0);
+            ListaCompeticion lComp;
+            desconversorlcomp(&lComp, recvBuff);
+            imprimirCompeticiones(lComp);
 
             break;
         case 3:;

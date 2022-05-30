@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+/*
 int cargarRanking(sqlite3 *db, Ranking* ranking, int codModalidad, int codCompeticion) {
     sqlite3_stmt *stmt;
 	char numeroFilas[] = "select count(A.DNI) from compite A, competicion B, modalidad C where A.CD_MODALIDAD = C.CD_MODALIDAD and A.CD_COMPETICION = B.CD_COMPETICION and C.CD_MODALIDAD = ? and B.CD_COMPETICION = ?;";
@@ -72,7 +73,7 @@ int cargarRanking(sqlite3 *db, Ranking* ranking, int codModalidad, int codCompet
 		return result;
 	}
 	return SQLITE_OK;
-}
+}*/
 
 void imprimirRanking(Ranking ranking){
 	for(int i = 0; i<ranking.tamanyo;i++){
@@ -81,6 +82,7 @@ void imprimirRanking(Ranking ranking){
 	}
 }
 
+/*
 int ainadirCompetidor(sqlite3 *db, Compite comp){
 	
 	sqlite3_stmt *stmt;
@@ -182,4 +184,4 @@ int actualizarCompetidor(sqlite3 *db, Compite compite){
 	}
 	return SQLITE_OK;
 	
-}
+}*/

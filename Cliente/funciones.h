@@ -3,6 +3,11 @@
 #include <winsock2.h>
 
 #include "atleta.h"
+#include "pais.h"
+#include "lugar.h"
+#include "modalidad.h"
+#include "competicion.h"
+#include "ranking.h"
 #include "desconversor.h"
 #ifdef __cplusplus
 extern "C" {

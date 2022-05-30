@@ -119,7 +119,7 @@ void desconversorlper(ListaPersona* lper, char* frase){
     }
 }
 
-/*
+
 void desconversorlmod(ListaModalidades* lmod, char* frase){
 	char* stringLeft;
 	char temporal[TAMAINO_SENDBUFF];
@@ -134,7 +134,7 @@ void desconversorlmod(ListaModalidades* lmod, char* frase){
 	}
     temporal[i] = '\0';
 	lmod->tamanyo = atoi(temporal);
-	lmod->modalidades = malloc(sizeof(Modalidad)*lmod->tamanyo);
+	lmod->modalidades = (Modalidad*) malloc(sizeof(Modalidad)*lmod->tamanyo);
 	stringLeft++;
 	for(int i = 0; i < lmod->tamanyo; i++){
 		int j = 0;
@@ -184,7 +184,7 @@ void desconversorllug(ListaLugar* llug, char* frase){
 	}
     temporal[i] = '\0';
 	llug->tamanyo = atoi(temporal);
-	llug->lugar = malloc(sizeof(Lugar)*llug->tamanyo);
+	llug->lugar = (Lugar*) malloc(sizeof(Lugar)*llug->tamanyo);
 	stringLeft++;
 	for(int i = 0; i < llug->tamanyo; i++){
 		int j = 0;
@@ -254,7 +254,7 @@ void desconversorlcomp(ListaCompeticion* lcomp, char* frase){
 	}
     temporal[i] = '\0';
 	lcomp->tamanyo = atoi(temporal);
-	lcomp->competicion = malloc(sizeof(Competicion)*lcomp->tamanyo);
+	lcomp->competicion = (Competicion*) malloc(sizeof(Competicion)*lcomp->tamanyo);
 	stringLeft++;
 	for(int i = 0; i < lcomp->tamanyo; i++){
 		int j = 0;
@@ -338,4 +338,95 @@ void desconversorlcomp(ListaCompeticion* lcomp, char* frase){
 		lcomp->competicion[i].ano = atoi(temporal);
 		stringLeft++;
 	}
-}*/
+}
+
+void desconversorRanking(Ranking* rank, char* frase){
+	char* stringLeft;
+	char temporal[TAMAINO_SENDBUFF];
+	stringLeft = strchr(frase, '$');
+	stringLeft++;
+	int i = 0;
+	strcpy(temporal, "");
+    while(stringLeft[0] != '$'){
+		temporal[i] = stringLeft[0];
+		stringLeft++;
+		i++;
+	}
+    temporal[i] = '\0';
+	rank->tamanyo = atoi(temporal);
+	rank->compite = (Compite*) malloc(sizeof(Compite)*rank->tamanyo);
+	stringLeft++;
+	for(int i = 0; i < rank->tamanyo; i++){
+		int j = 0;
+		strcpy(temporal, "");
+		while(stringLeft[0] != '$'){
+			temporal[j] = stringLeft[0];
+			stringLeft++;
+			j++;
+		}
+        temporal[j] = '\0';
+		strcpy(rank->compite[i].dniPer, temporal);
+		j = 0;
+		strcpy(temporal, "");
+		stringLeft++;
+		while(stringLeft[0] != '$'){
+			temporal[j] = stringLeft[0];
+			stringLeft++;
+			j++;
+		}
+        temporal[j] = '\0';
+		strcpy(rank->compite[i].nomPer, temporal);
+		j = 0;
+		strcpy(temporal, "");
+		stringLeft++;
+		while(stringLeft[0] != '$'){
+			temporal[j] = stringLeft[0];
+			stringLeft++;
+			j++;
+		}
+        temporal[j] = '\0';
+		strcpy(rank->compite[i].nomCompeticion, temporal);
+		j = 0;
+		strcpy(temporal, "");
+		stringLeft++;
+		while(stringLeft[0] != '$'){
+			temporal[j] = stringLeft[0];
+			stringLeft++;
+			j++;
+		}
+        temporal[j] = '\0';
+		strcpy(rank->compite[i].nomModalidad, temporal);
+		j = 0;
+		strcpy(temporal, "");
+		stringLeft++;
+		while(stringLeft[0] != '$'){
+			temporal[j] = stringLeft[0];
+			stringLeft++;
+			j++;
+		}
+        temporal[j] = '\0';
+		rank->compite[i].codModalidad = atoi(temporal);
+		j = 0;
+		strcpy(temporal, "");
+		stringLeft++;
+		while(stringLeft[0] != '$'){
+			temporal[j] = stringLeft[0];
+			stringLeft++;
+			j++;
+		}
+        temporal[j] = '\0';
+		rank->compite[i].codCompeticion = atoi(temporal);
+		j = 0;
+		strcpy(temporal, "");
+		stringLeft++;
+		while(stringLeft[0] != '$'){
+			temporal[j] = stringLeft[0];
+			stringLeft++;
+			j++;
+		}
+        temporal[j] = '\0';
+		rank->compite[i].lanzamiento = atof(temporal);
+		stringLeft++;
+
+	}
+}

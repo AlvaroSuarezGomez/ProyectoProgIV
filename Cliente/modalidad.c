@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-
+/*
 int cargarModalidades(sqlite3 *db, ListaModalidades* lmod){
     sqlite3_stmt *stmt;
 	char numeroFilas[] = "select count(*) from modalidad ;";
@@ -181,7 +181,7 @@ int actualizarModalidad(sqlite3 *db, Modalidad modalidad){
 	}
 	return SQLITE_OK;
 	
-}
+}*/
 
 void imprimirModalidades(ListaModalidades lmod){
 	for(int i = 0; i<lmod.tamanyo;i++){

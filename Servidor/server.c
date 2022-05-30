@@ -10,6 +10,7 @@
 #include "competicion.h"
 #include "lugar.h"
 #include "server.h"
+#include "ranking.h"
 
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 6000
@@ -123,25 +124,65 @@ int main(int argc, char *argv[]) {
 				result = cargarModalidades(db, &lmod);
 				stringlmodalidad(lmod, sendBuff);
 				send(comm_socket, sendBuff, sizeof(sendBuff), 0);
-			} else if(strncmp(recvBuff, "06",BYTES) == 0){ //Recive una PERSONA y la inserta en la db
-				//Esto es una mierda pero debería funcionar
-				ListaPersona lper;
-				int comprobacion =0;
+			} else if(strncmp(recvBuff, "06",BYTES) == 0){ //Recive un CD_PAIS y envia las competiciones que 
+				
+				int cdPais = 0;
 				char* lastchar = &recvBuff[0];
 				char frase[TAMAINO_RECVBUFF];
 				while(lastchar[0] != '$'){
 					lastchar++;
 				}
-				for(int i = 0; i < strlen(recvBuff)-BYTES;i++){
+				lastchar++;
+				int i = 0;
+				while(lastchar[0] != '$'){
 					frase[i] = lastchar[0];
 					lastchar++;
+					i++;
 				}
-				desconversorlper(&lper, frase);
-				ainadirPersona(db, lper.persona[0]);
+				frase[i+1] = '\0';
+				cdPais = atoi(frase);
+				ListaCompeticion lcomp;
+				cargarCompeticionesPorPais(db, &lcomp, cdPais);
+				stringcompeticion(lcomp, sendBuff);
+				send(comm_socket, sendBuff, sizeof(sendBuff), 0);
+			//Envia al servidor un CD_MOD y CD_COMP
+            //CD$CD_MOD$CD_COMP$
+			}else if(strncmp(recvBuff, "07",BYTES) == 0){//Recibe CD_MOD y CD_COMP y devuelve un Ranking
+				char* lastchar = &recvBuff[0];
+				char frase[TAMAINO_RECVBUFF];
+				while(lastchar[0] != '$'){
+					lastchar++;
+				}
+				lastchar++;
+				int i = 0;
+				while(lastchar[0] != '$'){
+					frase[i] = lastchar[0];
+					lastchar++;
+					i++;
+				}
+				frase[i+1] = '\0';
+				int cdmod = 0;
+				cdmod = atoi(frase);
+				i = 0;
+				lastchar++;
+				strcpy(frase, "");
+				while(lastchar[0] != '$'){
+					frase[i] = lastchar[0];
+					lastchar++;
+					i++;
+				}
+				frase[i+1] = '\0';
+				int cdcomp = atoi(frase);
+				Ranking rank;
+				cargarRanking(db, &rank, cdmod, cdcomp);
+				stringRanking(rank, sendBuff);
+				send(comm_socket, sendBuff, sizeof(sendBuff), 0);
 			}
-    }
-	}
-	while (1);
+				
+			
+
+        }
+    }while (1);
 }
 
 
@@ -230,6 +271,40 @@ void stringlugar(ListaLugar listalugar, char* stringfinal){
 		strcat(stringfinal, "$");
 
 	}
+}
+
+void stringRanking(Ranking rank, char* stringfinal){
+	strcpy(stringfinal, "");
+	strcat(stringfinal, "$");
+    char casteo[15];
+    strcpy(casteo,"");
+	sprintf(casteo, "%d", rank.tamanyo); // integer to string
+	strcat(stringfinal, casteo);
+	strcat(stringfinal, "$");
+	for (int i = 0; i < rank.tamanyo; i++)
+	{
+		strcpy(casteo,"");
+		strcat(stringfinal, rank.compite[i].dniPer);
+		strcat(stringfinal, "$");
+		strcat(stringfinal, rank.compite[i].nomPer);
+		strcat(stringfinal, "$");
+		strcat(stringfinal, rank.compite[i].nomCompeticion);
+		strcat(stringfinal, "$");
+		strcat(stringfinal, rank.compite[i].nomModalidad);
+		strcat(stringfinal, "$");
+		sprintf(casteo, "%d", rank.compite[i].codModalidad);
+		strcat(stringfinal, casteo);
+		strcpy(casteo, "");
+		strcat(stringfinal, "$");
+		sprintf(casteo, "%d", rank.compite[i].codCompeticion);
+		strcat(stringfinal, casteo);
+		strcpy(casteo, "");
+		strcat(stringfinal, "$");
+		sprintf(casteo, "%f", rank.compite[i].codCompeticion);
+		strcat(stringfinal, casteo);
+		strcat(stringfinal, "$");
+	}
+	
 }
 
 void stringcompeticion(ListaCompeticion lcompeticion, char* stringfinal){
@@ -623,3 +698,4 @@ void desconversorlcomp(ListaCompeticion* lcomp, char* frase){
 		stringLeft++;
 	}
 }
+

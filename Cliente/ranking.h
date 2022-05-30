@@ -25,9 +25,10 @@ typedef struct {
 
 
 void imprimirRanking(Ranking ranking);
+/*
 int cargarRanking(sqlite3 *db, Ranking* ranking, int codModalidad, int codCompeticion);
 int ainadirCompetidor(sqlite3 *db, Compite compite);
 int deleteCompetidor(sqlite3 *db, Compite compite);
-int actualizarCompetidor(sqlite3 *db, Compite compite);
+int actualizarCompetidor(sqlite3 *db, Compite compite);*/
 
 #endif

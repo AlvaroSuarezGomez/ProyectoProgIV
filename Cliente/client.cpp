@@ -14,6 +14,8 @@
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 6000
 
+//g++ client.cpp funciones.cpp pais.c atleta.c competicion.c desconversor.c -o testCliente.exe -lws2_32
+
 using namespace std;
 
 
@@ -92,7 +94,6 @@ int main(void) {
     //}
     
     //sqlite3_close(db);
-    return 0;
 	
 
 	// CLOSING the socket and cleaning Winsock...

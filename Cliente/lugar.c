@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+/*
 int cargarLugares(sqlite3 *db, ListaLugar* llugar){
     sqlite3_stmt *stmt;
 	char numeroFilas[] = "select count(*) from lugar;";
@@ -61,7 +62,7 @@ int cargarLugares(sqlite3 *db, ListaLugar* llugar){
 
 
 }
-
+*/
 void imprimirLugares(ListaLugar llugar){
 	for(int i = 0; i<llugar.tamanyo;i++){
 		printf("%i- Codigo: %i    Nombre: %s    Localidad: %s    Pais: %s\n",i+1, llugar.lugar[i].Cd_Lugar, llugar.lugar[i].NOM_LUGAR, llugar.lugar[i].LOC_LUGAR, llugar.lugar[i].pais);
@@ -69,6 +70,7 @@ void imprimirLugares(ListaLugar llugar){
 	}
 }
 
+/*
 int actualizarLugar(sqlite3 *db, Lugar lugar) {
 	sqlite3_stmt *stmt;
 	char sql[250] = "update lugar set NOM_LUGAR = ?, LOC_LUGAR = ?, CD_PAIS = ? where CD_LUGAR = ?", s;
@@ -151,4 +153,4 @@ int ainadirLugar(sqlite3 *db, Lugar lugar){
 	}
 	return SQLITE_OK;
 	
-}
+}*/

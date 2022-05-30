@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+/*
 int cargarCompeticiones(sqlite3 *db,ListaCompeticion* lcomp){
     sqlite3_stmt *stmt;
 	char numeroFilas[] = "select count(*) from competicion ;";
@@ -134,7 +135,7 @@ int cargarCompeticionesPorPais(sqlite3 *db,ListaCompeticion* lcomp, int codigoPa
 		return result;
 	}
 	return SQLITE_OK;
-}
+}*/
 
 void imprimirCompeticiones(ListaCompeticion lcomp){
 	for(int i = 0; i<lcomp.tamanyo;i++){
@@ -143,6 +144,7 @@ void imprimirCompeticiones(ListaCompeticion lcomp){
 	}
 }
 
+/*
 int actualizarCompeticion(sqlite3 *db, Competicion comp){
 	
 	sqlite3_stmt *stmt;
@@ -270,4 +272,4 @@ int ainadirCompeticion(sqlite3 *db, Competicion comp){
 	}
 	return SQLITE_OK;
 	
-}
+}*/
