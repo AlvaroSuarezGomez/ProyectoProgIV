@@ -935,7 +935,7 @@ char menuRanking(sqlite3* db) {
                         modificar = 0;
                         system("cls");
 
-                        printf("%s", rank.compite[competidorInt].dniPer);
+                        //printf("%s", rank.compite[competidorInt].dniPer);
 
                         printf("Los datos del competidor seleccionado son:\n");
                         printf("    DNI:    %s\n", rank.compite[competidorInt].dniPer);

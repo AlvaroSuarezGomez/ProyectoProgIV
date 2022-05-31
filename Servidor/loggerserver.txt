@@ -2,13 +2,11 @@ Server iniciado
 Server inicializado
 Conexion realizada
 Base de datos cargada
-Enviado: $3$11111111V$Alvaro$1234567$Espanya$1$22222222M$Markel$1345111$Espanya$1$$2$0$Francia$2$ 
-Enviado: $2$1$Espanya$2$Francia$ 
+Enviado: $5$11111111V$Alvaro$6771831$Italia$3$22222222M$Markel$1345111$Francia$2$33333333I$Inigo$1264912$Espanya$1$44444444X$Xabiman$2839120$Catalunya$4$55555555L$ElCiego$1264811$Japon$5$ 
+Enviado: $5$1$Espanya$2$Francia$3$Italia$4$Catalunya$5$Japon$ 
 Recivido: 06$1$ 
-Enviado: $6$1$1$Murcia$Red Bull$Red Bull te da alas o no$1$1$2022$2$1$Murcia$Petronor$Nose$5$3$2022$3$1$Murcia$Monster$SUPERDUPERCUP$1$1$2023$4$1$Murcia$Pepe Viyuela INC$Calvojuegos$12$5$2022$5$1$Murcia$Markel Inc$Markel VS Compa$16$6$2022$6$1$Murcia$Raul DG$La Velada del Anyo$2$1$2002$ 
-Enviado: $1$1$Lanzamiento de disco$Disco$ 
+Enviado: $1$1$1$Recinto de Murcia$Red Bull$Red Bull te da alas o no$1$1$2022$ 
+Enviado: $3$1$Lanzamiento de disco$Disco$2$Se lanza un enano$Lanzamiento de enanos$3$Se lanza una bola de hierro mientras se gira$Lanzamiento de peso$ 
 Recivido: 07$1$1$ 
-Enviado: $1$11111111V$Alvaro$$$1$1$15.000000$ 
-Enviado: $2$1$Espanya$2$Francia$ 
-Recivido: 06$1$ 
-Enviado: $6$1$1$Murcia$Red Bull$Red Bull te da alas o no$1$1$2022$2$1$Murcia$Petronor$Nose$5$3$2022$3$1$Murcia$Monster$SUPERDUPERCUP$1$1$2023$4$1$Murcia$Pepe Viyuela INC$Calvojuegos$12$5$2022$5$1$Murcia$Markel Inc$Markel VS Compa$16$6$2022$6$1$Murcia$Raul DG$La Velada del Anyo$2$1$2002$ 
+Enviado: $2$11111111V$Alvaro$$$1$1$15.000000$33333333I$Inigo$$à$1$1$99.000000$ 
+Servidor cerrado

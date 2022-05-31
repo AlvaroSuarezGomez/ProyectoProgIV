@@ -60,7 +60,7 @@ int cargarRanking(sqlite3 *db, Ranking* ranking, int codModalidad, int codCompet
 			strcpy(ranking->compite[i].nomPer, sqlite3_column_text(stmt, 4));
 			i++;
 			result = sqlite3_step(stmt);
-			printf(ranking->compite[i].dniPer);
+			//printf(ranking->compite[i].dniPer);
 			
 
 		}
